@@ -18,6 +18,7 @@ class User < ApplicationRecord
   validate :avatar_url_must_be_http, if: -> { avatar_url.present? }
 
   after_commit :enqueue_avatar_download, if: -> { avatar_url.present? }
+  after_commit :broadcast_dashboard_counts, if: -> { destroyed? || previously_new_record? || saved_change_to_role? }
 
   private
     def avatar_must_be_a_supported_image
@@ -34,5 +35,14 @@ class User < ApplicationRecord
 
     def enqueue_avatar_download
       AvatarDownloadJob.perform_later(id, avatar_url)
+    end
+
+    def broadcast_dashboard_counts
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "admin_dashboard",
+        target: "dashboard_counts",
+        partial: "admin/dashboards/counts",
+        locals: { total_users: User.count, users_by_role: User.group(:role).count }
+      )
     end
 end
