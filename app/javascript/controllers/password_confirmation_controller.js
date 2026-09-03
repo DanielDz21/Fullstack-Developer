@@ -7,6 +7,6 @@ export default class extends Controller {
 
   validate() {
     const mismatch = this.confirmationTarget.value.length > 0 && this.confirmationTarget.value !== this.passwordTarget.value
-    this.confirmationTarget.setCustomValidity(mismatch ? "Passwords don't match" : "")
+    this.confirmationTarget.setCustomValidity(mismatch ? "As senhas não coincidem" : "")
   }
 }
