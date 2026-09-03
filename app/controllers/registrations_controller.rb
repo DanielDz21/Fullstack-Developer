@@ -1,6 +1,7 @@
 class RegistrationsController < ApplicationController
   allow_unauthenticated_access
   skip_after_action :verify_authorized
+  rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_registration_path, alert: "Tente novamente mais tarde." }
 
   def new
     @user = User.new

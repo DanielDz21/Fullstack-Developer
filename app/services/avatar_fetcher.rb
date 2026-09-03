@@ -17,7 +17,7 @@ class AvatarFetcher
   OPEN_TIMEOUT = 5
   READ_TIMEOUT = 10
 
-  Result = Struct.new(:io, :content_type, :filename, keyword_init: true)
+  Result = Data.define(:io, :content_type, :filename)
 
   def initialize(url)
     @url = url

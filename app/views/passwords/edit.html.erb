@@ -1,7 +1,7 @@
 <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8 max-w-md mx-auto">
   <h1 class="font-bold text-2xl text-gray-900 mb-6 pb-4 border-b border-gray-100">Atualizar Senha</h1>
 
-  <%= form_with url: password_path(params[:token]), method: :put, class: "contents" do |form| %>
+  <%= form_with url: password_path(params[:token]), scope: :user, method: :put, class: "contents" do |form| %>
     <div data-controller="password-confirmation">
       <div class="my-5">
         <%= form.label :password, "Nova senha", class: "form-label" %>
