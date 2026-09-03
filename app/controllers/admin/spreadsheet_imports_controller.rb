@@ -5,7 +5,9 @@ class Admin::SpreadsheetImportsController < ApplicationController
 
   def index
     authorize SpreadsheetImport, :index?
-    @spreadsheet_imports = policy_scope(SpreadsheetImport).order(created_at: :desc)
+    @spreadsheet_imports = policy_scope(SpreadsheetImport)
+      .includes(:user, :spreadsheet_import_row_errors, file_attachment: :blob)
+      .order(created_at: :desc)
   end
 
   def new

@@ -5,7 +5,7 @@ class Admin::UsersController < ApplicationController
 
   def index
     authorize User, :index?
-    @users = policy_scope(User).order(:full_name)
+    @users = policy_scope(User).with_attached_avatar.order(:full_name)
   end
 
   def new
