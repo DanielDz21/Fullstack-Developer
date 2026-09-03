@@ -26,20 +26,20 @@ class SpreadsheetImportJob < ApplicationJob
       import.file.open do |tempfile|
         extension = File.extname(import.file.filename.to_s).delete(".").downcase.to_sym
         sheet = Roo::Spreadsheet.open(tempfile.path, extension: extension).sheet(0)
-        headers = sheet.row(1).map { |header| header.to_s.strip.downcase }
+        first_data_row = import.has_header? ? 2 : 1
 
-        (2..sheet.last_row).filter_map do |row_number|
+        (first_data_row..sheet.last_row).filter_map do |row_number|
           values = sheet.row(row_number)
           next if values.all? { |value| value.to_s.strip.blank? }
-          [ row_number, headers.zip(values).to_h ]
+          [ row_number, { "nome" => values[0].to_s.strip, "email" => values[1].to_s.strip } ]
         end
       end
     end
 
     def import_row(import, row_number, data)
       user = User.new(
-        email: data["email"].to_s.strip,
-        full_name: data["nome"].to_s.strip,
+        email: data["email"],
+        full_name: data["nome"],
         password: SecureRandom.hex(16),
         role: :no_admin
       )

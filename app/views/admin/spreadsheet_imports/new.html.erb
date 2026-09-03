@@ -6,8 +6,16 @@
 
     <div class="my-5 rounded-lg border border-gray-200 p-6 bg-gray-50 shadow-sm">
       <%= form.label :file, "Planilha (CSV ou XLSX)", class: "form-label" %>
-      <p class="text-sm font-medium text-gray-600 mt-1 mb-4">Colunas esperadas: <code class="bg-gray-200 text-gray-800 rounded px-1.5 py-0.5 mx-0.5 font-mono text-xs">email</code>, <code class="bg-gray-200 text-gray-800 rounded px-1.5 py-0.5 mx-0.5 font-mono text-xs">nome</code>.</p>
+      <p class="text-sm font-medium text-gray-600 mt-1 mb-4">
+        A 1ª coluna é sempre tratada como <strong>Nome completo</strong> e a 2ª como <strong>E-mail</strong>, pela posição — o texto do cabeçalho (se houver) não é lido nem validado.
+      </p>
       <%= form.file_field :file, accept: ".csv,.xlsx", required: true, class: "form-file" %>
+
+      <div class="mt-4 flex items-center gap-2">
+        <%= form.check_box :has_header, class: "h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" %>
+        <%= form.label :has_header, "Este arquivo tem uma linha de cabeçalho", class: "text-sm font-medium text-gray-700" %>
+      </div>
+      <p class="text-xs text-gray-500 mt-1">Se marcado, a primeira linha é ignorada por completo (nem seu conteúdo é lido).</p>
     </div>
 
     <div class="mt-8 flex flex-col sm:flex-row gap-4 items-center">

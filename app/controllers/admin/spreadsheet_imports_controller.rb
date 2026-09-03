@@ -35,6 +35,6 @@ class Admin::SpreadsheetImportsController < ApplicationController
     end
 
     def spreadsheet_import_params
-      params.expect(spreadsheet_import: [ :file ])
+      params.expect(spreadsheet_import: [ :file, :has_header ])
     end
 end
