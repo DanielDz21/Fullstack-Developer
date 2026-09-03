@@ -20,10 +20,10 @@ RSpec.describe "Responsive navigation", type: :system do
     sign_in_via_ui(admin)
 
     expect(page).to have_button("Menu", visible: true)
-    expect(page).to have_link("Gerenciar usuários", visible: :hidden)
+    expect(page).to have_link("Usuários", visible: :all)
 
     click_button "Menu"
-    click_link "Gerenciar usuários"
+    click_link "Usuários"
 
     expect(page).to have_content("Usuários")
     expect(page).to have_link("Novo Usuário")

@@ -1,23 +1,24 @@
-<h1 class="font-bold text-4xl">Entrar</h1>
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8 max-w-md mx-auto">
+  <h1 class="font-bold text-2xl text-gray-900 mb-6 pb-4 border-b border-gray-100">Entrar</h1>
 
-<%= form_with url: session_url, class: "contents" do |form| %>
-  <div class="my-5">
-    <%= form.email_field :email, required: true, autofocus: true, autocomplete: "username", placeholder: "Digite seu e-mail", value: params[:email], class: "form-input" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Digite sua senha", maxlength: 72, class: "form-input" %>
-  </div>
-
-  <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
-    <div class="inline">
-      <%= form.submit "Entrar", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
+  <%= form_with url: session_url, class: "contents" do |form| %>
+    <div class="my-5">
+      <%= form.label :email, "E-mail", class: "form-label" %>
+      <%= form.email_field :email, required: true, autofocus: true, autocomplete: "username", placeholder: "Digite seu e-mail", value: params[:email], class: "form-input" %>
     </div>
 
-    <div class="mt-4 text-sm text-gray-500 sm:mt-0">
-      <%= link_to "Esqueceu a senha?", new_password_path, class: "link-muted" %>
-      &middot;
-      <%= link_to "Criar uma conta", new_registration_path, class: "link-muted" %>
+    <div class="my-5">
+      <%= form.label :password, "Senha", class: "form-label" %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Digite sua senha", maxlength: 72, class: "form-input" %>
     </div>
-  </div>
-<% end %>
+
+    <div class="mt-8 flex flex-col gap-4">
+      <%= form.submit "Entrar", class: "btn-primary w-full text-center cursor-pointer text-xl" %>
+
+      <div class="text-sm font-bold flex flex-col sm:flex-row justify-between items-center mt-2 gap-4">
+        <%= link_to "Esqueceu a senha?", new_password_path, class: "link-muted" %>
+        <%= link_to "Criar uma conta", new_registration_path, class: "link-action" %>
+      </div>
+    </div>
+  <% end %>
+</div>

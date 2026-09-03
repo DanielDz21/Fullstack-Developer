@@ -23,11 +23,13 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= render "layouts/nav" if Current.user %>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen flex selection:bg-emerald-200 selection:text-emerald-900">
+    <% if Current.user %>
+      <%= render "layouts/sidebar" %>
+    <% end %>
 
-    <main class="container mx-auto mt-8 px-5 flex">
-      <div class="mx-auto md:w-2/3 w-full">
+    <main class="flex-1 min-w-0 transition-all duration-300 ml-0 <%= Current.user ? 'md:ml-64' : '' %>">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <%= render "layouts/flash" %>
         <%= yield %>
       </div>

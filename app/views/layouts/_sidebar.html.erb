@@ -1,0 +1,54 @@
+<div data-controller="sidebar-toggle">
+  <!-- Mobile Header / Hamburger -->
+  <div class="md:hidden fixed top-0 left-0 w-full bg-white border-b border-gray-200 z-30 flex items-center justify-between p-4 shadow-sm">
+    <div class="font-bold text-gray-900 tracking-tight text-lg">Fullstack Developer</div>
+    <button data-action="sidebar-toggle#toggle" title="Menu" aria-label="Menu" class="text-gray-600 hover:text-gray-900 focus:outline-none p-1 rounded-md hover:bg-gray-100 transition-colors">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+  </div>
+
+  <!-- Sidebar -->
+  <aside data-sidebar-toggle-target="menu" class="fixed inset-y-0 left-0 bg-white w-64 border-r border-gray-200 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col h-screen">
+    
+    <div class="hidden md:flex items-center justify-center p-4 border-b border-gray-100 h-16">
+      <span class="font-bold text-gray-900 tracking-tight text-lg">Fullstack Developer</span>
+    </div>
+
+    <!-- User Profile area -->
+    <div class="p-6 flex flex-col items-center mt-14 md:mt-0">
+      <% if Current.user.avatar.attached? %>
+        <%= image_tag Current.user.avatar.variant(resize_to_limit: [ 96, 96 ]), class: "size-20 rounded-full object-cover shadow-sm border border-gray-100 mb-3" %>
+      <% else %>
+        <div class="size-20 rounded-full bg-gray-100 flex items-center justify-center mb-3 border border-gray-200">
+          <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+        </div>
+      <% end %>
+      <div class="text-center w-full">
+        <p class="font-semibold text-gray-900 text-sm truncate px-2"><%= Current.user.full_name %></p>
+        <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider mt-1"><%= Current.user.role == 'admin' ? 'Administrador' : 'Usuário Normal' %></p>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
+      <%= link_to "Meu Perfil", profile_path, class: "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md #{current_page?(profile_path) || current_page?(edit_profile_path) ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'} transition-colors" %>
+      
+      <% if Current.user.admin? %>
+        <div class="pt-6 pb-2">
+          <p class="px-3 text-xs font-bold text-gray-400 uppercase tracking-wider">Admin</p>
+        </div>
+        <%= link_to "Painel", admin_dashboard_path, class: "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md #{current_page?(admin_dashboard_path) ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'} transition-colors" %>
+        <%= link_to "Usuários", admin_users_path, class: "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md #{current_page?(admin_users_path) ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'} transition-colors" %>
+        <%= link_to "Importações de Planilha", admin_spreadsheet_imports_path, class: "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md #{current_page?(admin_spreadsheet_imports_path) ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'} transition-colors" %>
+      <% end %>
+    </nav>
+
+    <!-- Logout -->
+    <div class="p-4 border-t border-gray-100">
+      <%= button_to "Sair", session_path, method: :delete, class: "w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" %>
+    </div>
+  </aside>
+  
+  <!-- Overlay for mobile -->
+  <div data-sidebar-toggle-target="overlay" data-action="click->sidebar-toggle#close" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-30 hidden md:hidden transition-opacity"></div>
+</div>

@@ -1,17 +1,21 @@
-<h1 class="font-bold text-4xl">Atualizar sua senha</h1>
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8 max-w-md mx-auto">
+  <h1 class="font-bold text-2xl text-gray-900 mb-6 pb-4 border-b border-gray-100">Atualizar Senha</h1>
 
-<%= form_with url: password_path(params[:token]), method: :put, class: "contents" do |form| %>
-  <div data-controller="password-confirmation">
-    <div class="my-5">
-      <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Enter new password", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "password", action: "input->password-confirmation#validate" } %>
+  <%= form_with url: password_path(params[:token]), method: :put, class: "contents" do |form| %>
+    <div data-controller="password-confirmation">
+      <div class="my-5">
+        <%= form.label :password, "Nova senha", class: "form-label" %>
+        <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Digite a nova senha", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "password", action: "input->password-confirmation#validate" } %>
+      </div>
+
+      <div class="my-5">
+        <%= form.label :password_confirmation, "Confirmar nova senha", class: "form-label" %>
+        <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repita a nova senha", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "confirmation", action: "input->password-confirmation#validate" } %>
+      </div>
     </div>
 
-    <div class="my-5">
-      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repeat new password", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "confirmation", action: "input->password-confirmation#validate" } %>
+    <div class="mt-8">
+      <%= form.submit "Salvar", class: "btn-primary w-full text-center cursor-pointer text-xl" %>
     </div>
-  </div>
-
-  <div class="inline">
-    <%= form.submit "Salvar", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
-  </div>
-<% end %>
+  <% end %>
+</div>

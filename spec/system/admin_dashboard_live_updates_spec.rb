@@ -16,7 +16,7 @@ RSpec.describe "Admin dashboard live updates", type: :system do
 
     using_session(:admin_one) do
       sign_in_via_ui(admin_one)
-      click_link "Gerenciar usuários"
+      click_link "Usuários"
       click_link "Novo Usuário"
 
       fill_in "Nome", with: "Grace Hopper"

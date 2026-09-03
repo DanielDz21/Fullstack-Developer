@@ -1,11 +1,18 @@
-<h1 class="font-bold text-4xl">Forgot your password?</h1>
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8 max-w-md mx-auto">
+  <h1 class="font-bold text-2xl text-gray-900 mb-6 pb-4 border-b border-gray-100">Esqueceu a senha?</h1>
 
-<%= form_with url: passwords_path, class: "contents" do |form| %>
-  <div class="my-5">
-    <%= form.email_field :email, required: true, autofocus: true, autocomplete: "username", placeholder: "Digite seu e-mail", value: params[:email], class: "form-input" %>
-  </div>
+  <%= form_with url: passwords_path, class: "contents" do |form| %>
+    <div class="my-5">
+      <%= form.label :email, "E-mail", class: "form-label" %>
+      <%= form.email_field :email, required: true, autofocus: true, autocomplete: "username", placeholder: "Digite seu e-mail", value: params[:email], class: "form-input" %>
+    </div>
 
-  <div class="inline">
-    <%= form.submit "E-mail reset instructions", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
-  </div>
-<% end %>
+    <div class="mt-8">
+      <%= form.submit "Enviar instruções", class: "btn-primary w-full text-center cursor-pointer text-xl" %>
+    </div>
+    
+    <div class="mt-4 text-center">
+      <%= link_to "Voltar para o login", new_session_path, class: "link-muted" %>
+    </div>
+  <% end %>
+</div>

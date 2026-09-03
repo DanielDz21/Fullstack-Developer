@@ -1,12 +1,12 @@
-<div id="dashboard_counts" data-controller="highlight-on-update" data-highlight-on-update-highlight-class="ring-2 ring-blue-400" class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
-  <div class="rounded-lg border border-gray-200 p-4">
-    <p class="text-sm text-gray-500">Total de Usuários</p>
-    <p class="text-3xl font-bold"><%= total_users %></p>
+<div id="dashboard_counts" data-controller="highlight-on-update" data-highlight-on-update-highlight-class="ring-2 ring-emerald-500" class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-6">
+  <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm flex flex-col justify-between">
+    <p class="text-sm font-semibold text-gray-500">Total de Usuários</p>
+    <p class="text-4xl font-bold text-gray-900 mt-2"><%= total_users %></p>
   </div>
-  <% User.roles.keys.each do |role| %>
-    <div class="rounded-lg border border-gray-200 p-4">
-      <p class="text-sm text-gray-500"><%= role == "admin" ? "Administrador" : "Usuário Normal" %></p>
-      <p class="text-3xl font-bold"><%= users_by_role[role] || 0 %></p>
+  <% User.roles.keys.each_with_index do |role, index| %>
+    <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm flex flex-col justify-between">
+      <p class="text-sm font-semibold text-gray-500"><%= role == "admin" ? "Administrador" : "Usuário Normal" %></p>
+      <p class="text-4xl font-bold text-gray-900 mt-2"><%= users_by_role[role] || 0 %></p>
     </div>
   <% end %>
 </div>
