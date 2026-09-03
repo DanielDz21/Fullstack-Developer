@@ -1,16 +1,22 @@
 # Name of your application. Used to uniquely configure containers.
 service: fullstack_developer
 
-# Name of the container image (use your-user/app-name on external registries).
-image: fullstack_developer
+# Name of the container image. GHCR (see registry below) expects the <owner>/<repo> form.
+image: <%= ENV.fetch("KAMAL_REGISTRY_USERNAME", "your-github-username") %>/fullstack_developer
 
 # Deploy to these servers.
+#
+# deploy.yml is parsed as ERB before YAML, so the actual host is read from an env var at deploy
+# time (`KAMAL_WEB_HOST=<real ip or hostname> bin/kamal deploy`) instead of being hardcoded here.
+# The fallback below (203.0.113.10) is a TEST-NET-3 address reserved for documentation by RFC 5737 —
+# it deliberately can't resolve to a real host, so a deploy attempted without setting KAMAL_WEB_HOST
+# fails fast instead of silently targeting someone else's machine.
 servers:
   web:
-    - 192.168.0.1
+    - <%= ENV.fetch("KAMAL_WEB_HOST", "203.0.113.10") %>
   # job:
   #   hosts:
-  #     - 192.168.0.1
+  #     - <%= ENV.fetch("KAMAL_WEB_HOST", "203.0.113.10") %>
   #   cmd: bin/jobs
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
@@ -25,16 +31,16 @@ servers:
 #   host: app.example.com
 
 # Where you keep your container images.
+#
+# ghcr.io needs no extra infrastructure (unlike e.g. a self-hosted registry on localhost:5555) and
+# authenticates with a GitHub personal access token, kept out of this file via .kamal/secrets.
 registry:
-  # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  server: localhost:5555
-
-  # Needed for authenticated registries.
-  # username: your-user
+  server: ghcr.io
+  username: <%= ENV.fetch("KAMAL_REGISTRY_USERNAME", "your-github-username") %>
 
   # Always use an access token rather than real password when possible.
-  # password:
-  #   - KAMAL_REGISTRY_PASSWORD
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
