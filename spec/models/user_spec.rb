@@ -39,4 +39,60 @@ RSpec.describe User, type: :model do
   describe "associations" do
     it { is_expected.to have_many(:sessions).dependent(:destroy) }
   end
+
+  describe "avatar" do
+    it "accepts a supported image within the size limit" do
+      user = build(:user)
+      user.avatar.attach(io: StringIO.new("bytes"), filename: "avatar.png", content_type: "image/png")
+
+      expect(user).to be_valid
+    end
+
+    it "rejects an unsupported content type" do
+      user = build(:user)
+      user.avatar.attach(io: StringIO.new("not-an-image"), filename: "file.txt", content_type: "text/plain")
+
+      expect(user).not_to be_valid
+      expect(user.errors[:avatar]).to be_present
+    end
+
+    it "rejects a file that is too large" do
+      stub_const("User::AVATAR_MAX_BYTES", 10)
+      user = build(:user)
+      user.avatar.attach(io: StringIO.new("x" * 20), filename: "avatar.png", content_type: "image/png")
+
+      expect(user).not_to be_valid
+      expect(user.errors[:avatar]).to be_present
+    end
+  end
+
+  describe "avatar_url" do
+    it "rejects a value that is not a valid http(s) URL" do
+      user = build(:user, avatar_url: "not a url")
+
+      expect(user).not_to be_valid
+      expect(user.errors[:avatar_url]).to be_present
+    end
+
+    it "accepts a valid http(s) URL" do
+      user = build(:user, avatar_url: "https://example.com/avatar.png")
+
+      expect(user).to be_valid
+    end
+
+    it "enqueues a download job after a successful save" do
+      user = build(:user, avatar_url: "https://example.com/avatar.png")
+
+      expect { user.save! }.to have_enqueued_job(AvatarDownloadJob).with { |id, url|
+        expect(id).to eq(user.id)
+        expect(url).to eq("https://example.com/avatar.png")
+      }
+    end
+
+    it "does not enqueue a download job when blank" do
+      user = build(:user)
+
+      expect { user.save! }.not_to have_enqueued_job(AvatarDownloadJob)
+    end
+  end
 end

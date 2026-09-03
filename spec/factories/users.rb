@@ -8,5 +8,15 @@ FactoryBot.define do
     trait :admin do
       role { :admin }
     end
+
+    trait :with_avatar do
+      after(:build) do |user|
+        user.avatar.attach(
+          io: StringIO.new("fake-image-bytes"),
+          filename: "avatar.png",
+          content_type: "image/png"
+        )
+      end
+    end
   end
 end
