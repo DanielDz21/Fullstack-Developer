@@ -63,6 +63,14 @@ RSpec.describe "Admin::SpreadsheetImports", type: :request do
       expect(response).to redirect_to(admin_spreadsheet_import_url(spreadsheet_import))
     end
 
+    it "accepts the has_header flag" do
+      sign_in_as(admin)
+
+      post admin_spreadsheet_imports_path, params: { spreadsheet_import: { file: csv_file, has_header: false } }
+
+      expect(SpreadsheetImport.last.has_header).to be false
+    end
+
     it "re-renders the form when no file is attached" do
       sign_in_as(admin)
 

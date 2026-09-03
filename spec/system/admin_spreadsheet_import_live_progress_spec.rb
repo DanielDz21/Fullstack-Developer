@@ -9,6 +9,7 @@ RSpec.describe "Admin spreadsheet import live progress", type: :system do
     click_link "Nova Importação"
 
     attach_file "Planilha (CSV ou XLSX)", Rails.root.join("spec/fixtures/files/valid_import.csv")
+    expect(page).to have_checked_field("Este arquivo tem uma linha de cabeçalho")
     click_button "Enviar"
 
     expect(page).to have_content("Planilha enviada. A importação está sendo processada em segundo plano.")

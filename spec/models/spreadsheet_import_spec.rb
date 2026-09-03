@@ -20,7 +20,7 @@ RSpec.describe SpreadsheetImport, type: :model do
 
     it "accepts a .csv file" do
       spreadsheet_import = build(:spreadsheet_import)
-      spreadsheet_import.file.attach(io: StringIO.new("email,full_name\n"), filename: "import.csv", content_type: "text/csv")
+      spreadsheet_import.file.attach(io: StringIO.new("nome,email\n"), filename: "import.csv", content_type: "text/csv")
 
       expect(spreadsheet_import).to be_valid
     end
@@ -49,6 +49,12 @@ RSpec.describe SpreadsheetImport, type: :model do
 
   describe "status enum" do
     it { is_expected.to define_enum_for(:status).with_values(pending: 0, processing: 1, completed: 2, failed: 3) }
+  end
+
+  describe "#has_header" do
+    it "defaults to true for a new import" do
+      expect(SpreadsheetImport.new.has_header).to be true
+    end
   end
 
   describe "#progress_percent" do
