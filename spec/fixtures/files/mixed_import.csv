@@ -1,0 +1,6 @@
+email,full_name
+dave@example.com,Dave Example
+,Missing Email
+not-an-email,Bad Email Format
+existing@example.com,Duplicate Email
+erin@example.com,Erin Example
