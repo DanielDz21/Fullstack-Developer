@@ -43,6 +43,9 @@ gem "image_processing", "~> 1.2"
 # Object-oriented authorization for Rails applications [https://github.com/varvet/pundit]
 gem "pundit"
 
+# Reads CSV and XLSX spreadsheets through a single uniform API [https://github.com/roo-rb/roo]
+gem "roo"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
