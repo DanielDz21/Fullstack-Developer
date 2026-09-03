@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :users do
       patch :toggle_role, on: :member
     end
+    resources :spreadsheet_imports, only: %i[ index new create show ]
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

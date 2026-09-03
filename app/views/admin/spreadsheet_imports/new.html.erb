@@ -1,0 +1,23 @@
+<h1 class="font-bold text-4xl">New Spreadsheet Import</h1>
+
+<%= form_with model: [ :admin, @spreadsheet_import ], class: "contents" do |form| %>
+  <% if @spreadsheet_import.errors.any? %>
+    <div class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg">
+      <ul>
+        <% @spreadsheet_import.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :file, "Spreadsheet (CSV or XLSX)", class: "block font-medium" %>
+    <p class="text-sm text-gray-500 mt-1">Expected columns: <code>email</code>, <code>full_name</code>.</p>
+    <%= form.file_field :file, accept: ".csv,.xlsx", required: true, class: "block mt-2 w-full" %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit "Upload", class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>
