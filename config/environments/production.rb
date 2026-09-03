@@ -9,6 +9,12 @@ Rails.application.configure do
   # Eager load code on boot for better performance and memory savings (ignored by Rake tasks).
   config.eager_load = true
 
+  # Rails 8.1's default (`self.yjit = !Rails.env.local?`, set in config/application.rb) auto-enables
+  # YJIT in production. This container instead enables Ruby 4's newer ZJIT via RUBYOPT (Dockerfile) -
+  # only one JIT can be active per process, and leaving both on prints a boot-time conflict warning
+  # and silently drops the Rails-side enable. Disabled here so ZJIT is the one actually running.
+  config.yjit = false
+
   # Full error reports are disabled.
   config.consider_all_requests_local = false
 

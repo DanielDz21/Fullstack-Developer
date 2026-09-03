@@ -21,11 +21,14 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment variables and enable jemalloc for reduced memory usage and latency.
+# RUBYOPT enables Ruby 4's ZJIT for extra runtime performance; it's a silent no-op (just a startup
+# warning) on any Ruby build without ZJIT support, so it's safe to leave on unconditionally.
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development" \
-    LD_PRELOAD="/usr/local/lib/libjemalloc.so"
+    LD_PRELOAD="/usr/local/lib/libjemalloc.so" \
+    RUBYOPT="--zjit"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
