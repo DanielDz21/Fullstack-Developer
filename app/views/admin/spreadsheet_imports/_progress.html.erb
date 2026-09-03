@@ -1,26 +1,33 @@
-<div id="spreadsheet_import_progress" data-controller="highlight-on-update" data-highlight-on-update-highlight-class="ring-2 ring-blue-400" class="mt-4">
-  <p class="font-medium">Status: <%= spreadsheet_import.status == "processing" ? "Processando" : spreadsheet_import.status == "completed" ? "Concluída" : spreadsheet_import.status == "failed" ? "Falhou" : "Pendente" %></p>
+<div id="spreadsheet_import_progress" data-controller="highlight-on-update" data-highlight-on-update-highlight-class="ring-2 ring-emerald-500" class="mt-4">
+  <div class="rounded-xl border border-gray-200 p-6 bg-gray-50 shadow-sm">
+    <div class="flex items-center gap-2 mb-4">
+      <p class="font-semibold text-gray-500 text-sm">Status:</p>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= spreadsheet_import.status == 'processing' ? 'bg-blue-100 text-blue-800' : spreadsheet_import.status == 'completed' ? 'bg-emerald-100 text-emerald-800' : spreadsheet_import.status == 'failed' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800' %>">
+        <%= spreadsheet_import.status == "processing" ? "Processando" : spreadsheet_import.status == "completed" ? "Concluída" : spreadsheet_import.status == "failed" ? "Falhou" : "Pendente" %>
+      </span>
+    </div>
 
-  <div class="mt-2 h-4 w-full rounded-full bg-gray-200 overflow-hidden">
-    <div class="h-full bg-blue-600 transition-all" style="width: <%= spreadsheet_import.progress_percent %>%"></div>
+    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2 overflow-hidden">
+      <div class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: <%= spreadsheet_import.progress_percent %>%"></div>
+    </div>
+    <p class="text-sm font-medium text-gray-600 text-right"><%= spreadsheet_import.processed_rows %> / <%= spreadsheet_import.total_rows %> linhas processadas</p>
   </div>
-  <p class="text-sm text-gray-500 mt-1"><%= spreadsheet_import.processed_rows %> / <%= spreadsheet_import.total_rows %> linhas processadas</p>
 
   <% if spreadsheet_import.spreadsheet_import_row_errors.any? %>
-    <h2 class="font-bold text-2xl mt-6">Row errors</h2>
-    <div class="mt-2 overflow-x-auto">
-      <table class="w-full min-w-max text-left">
-        <thead>
-          <tr class="border-b border-gray-300">
-            <th class="py-2">Row</th>
-            <th class="py-2">Reason</th>
+    <h2 class="font-bold text-xl text-gray-900 mt-8 mb-4">Erros nas Linhas</h2>
+    <div class="overflow-x-auto bg-white border border-gray-200 rounded-xl shadow-sm">
+      <table class="w-full min-w-max text-left border-collapse">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="py-3 px-4 font-semibold text-gray-500 text-xs uppercase tracking-wider w-24">Linha</th>
+            <th class="py-3 px-4 font-semibold text-gray-500 text-xs uppercase tracking-wider">Motivo</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-gray-200">
           <% spreadsheet_import.spreadsheet_import_row_errors.order(:row_number).each do |row_error| %>
-            <tr class="border-b border-gray-100">
-              <td class="py-2"><%= row_error.row_number %></td>
-              <td class="py-2"><%= row_error.message %></td>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="py-3 px-4 font-medium text-gray-900 text-center bg-gray-50/50"><%= row_error.row_number %></td>
+              <td class="py-3 px-4 text-red-600"><%= row_error.message %></td>
             </tr>
           <% end %>
         </tbody>

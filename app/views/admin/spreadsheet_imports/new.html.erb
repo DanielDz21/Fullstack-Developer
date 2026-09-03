@@ -1,15 +1,18 @@
-<h1 class="font-bold text-4xl">Nova Importação</h1>
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8 max-w-2xl mx-auto">
+  <h1 class="font-bold text-2xl text-gray-900 mb-6 border-b border-gray-100 pb-4">Nova Importação</h1>
 
-<%= form_with model: [ :admin, @spreadsheet_import ], class: "contents" do |form| %>
-  <%= render "shared/form_errors", record: @spreadsheet_import %>
+  <%= form_with model: [ :admin, @spreadsheet_import ], class: "contents" do |form| %>
+    <%= render "shared/form_errors", record: @spreadsheet_import %>
 
-  <div class="my-5">
-    <%= form.label :file, "Planilha (CSV ou XLSX)", class: "form-label" %>
-    <p class="text-sm text-gray-500 mt-1">Colunas esperadas: <code>email</code>, <code>full_name</code>.</p>
-    <%= form.file_field :file, accept: ".csv,.xlsx", required: true, class: "form-file" %>
-  </div>
+    <div class="my-5 rounded-lg border border-gray-200 p-6 bg-gray-50 shadow-sm">
+      <%= form.label :file, "Planilha (CSV ou XLSX)", class: "form-label" %>
+      <p class="text-sm font-medium text-gray-600 mt-1 mb-4">Colunas esperadas: <code class="bg-gray-200 text-gray-800 rounded px-1.5 py-0.5 mx-0.5 font-mono text-xs">email</code>, <code class="bg-gray-200 text-gray-800 rounded px-1.5 py-0.5 mx-0.5 font-mono text-xs">nome</code>.</p>
+      <%= form.file_field :file, accept: ".csv,.xlsx", required: true, class: "form-file" %>
+    </div>
 
-  <div class="inline">
-    <%= form.submit "Enviar", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
-  </div>
-<% end %>
+    <div class="mt-8 flex flex-col sm:flex-row gap-4 items-center">
+      <%= form.submit "Enviar Planilha", class: "btn-primary w-full sm:w-auto text-center cursor-pointer text-lg" %>
+      <%= link_to "Cancelar", admin_spreadsheet_imports_path, class: "link-muted" %>
+    </div>
+  <% end %>
+</div>
