@@ -1,4 +1,4 @@
-<h1 class="font-bold text-4xl">Update your password</h1>
+<h1 class="font-bold text-4xl">Atualizar sua senha</h1>
 
 <%= form_with url: password_path(params[:token]), method: :put, class: "contents" do |form| %>
   <div data-controller="password-confirmation">
@@ -12,6 +12,6 @@
   </div>
 
   <div class="inline">
-    <%= form.submit "Save", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
+    <%= form.submit "Salvar", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
   </div>
 <% end %>

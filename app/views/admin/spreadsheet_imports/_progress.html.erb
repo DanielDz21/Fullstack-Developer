@@ -1,10 +1,10 @@
 <div id="spreadsheet_import_progress" data-controller="highlight-on-update" data-highlight-on-update-highlight-class="ring-2 ring-blue-400" class="mt-4">
-  <p class="font-medium">Status: <%= spreadsheet_import.status.humanize %></p>
+  <p class="font-medium">Status: <%= spreadsheet_import.status == "processing" ? "Processando" : spreadsheet_import.status == "completed" ? "Concluída" : spreadsheet_import.status == "failed" ? "Falhou" : "Pendente" %></p>
 
   <div class="mt-2 h-4 w-full rounded-full bg-gray-200 overflow-hidden">
     <div class="h-full bg-blue-600 transition-all" style="width: <%= spreadsheet_import.progress_percent %>%"></div>
   </div>
-  <p class="text-sm text-gray-500 mt-1"><%= spreadsheet_import.processed_rows %> / <%= spreadsheet_import.total_rows %> rows processed</p>
+  <p class="text-sm text-gray-500 mt-1"><%= spreadsheet_import.processed_rows %> / <%= spreadsheet_import.total_rows %> linhas processadas</p>
 
   <% if spreadsheet_import.spreadsheet_import_row_errors.any? %>
     <h2 class="font-bold text-2xl mt-6">Row errors</h2>

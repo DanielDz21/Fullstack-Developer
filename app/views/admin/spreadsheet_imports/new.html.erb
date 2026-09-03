@@ -1,15 +1,15 @@
-<h1 class="font-bold text-4xl">New Spreadsheet Import</h1>
+<h1 class="font-bold text-4xl">Nova Importação</h1>
 
 <%= form_with model: [ :admin, @spreadsheet_import ], class: "contents" do |form| %>
   <%= render "shared/form_errors", record: @spreadsheet_import %>
 
   <div class="my-5">
-    <%= form.label :file, "Spreadsheet (CSV or XLSX)", class: "form-label" %>
-    <p class="text-sm text-gray-500 mt-1">Expected columns: <code>email</code>, <code>full_name</code>.</p>
+    <%= form.label :file, "Planilha (CSV ou XLSX)", class: "form-label" %>
+    <p class="text-sm text-gray-500 mt-1">Colunas esperadas: <code>email</code>, <code>full_name</code>.</p>
     <%= form.file_field :file, accept: ".csv,.xlsx", required: true, class: "form-file" %>
   </div>
 
   <div class="inline">
-    <%= form.submit "Upload", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
+    <%= form.submit "Enviar", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
   </div>
 <% end %>

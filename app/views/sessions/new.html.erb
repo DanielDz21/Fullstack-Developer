@@ -1,23 +1,23 @@
-<h1 class="font-bold text-4xl">Sign in</h1>
+<h1 class="font-bold text-4xl">Entrar</h1>
 
 <%= form_with url: session_url, class: "contents" do |form| %>
   <div class="my-5">
-    <%= form.email_field :email, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email], class: "form-input" %>
+    <%= form.email_field :email, required: true, autofocus: true, autocomplete: "username", placeholder: "Digite seu e-mail", value: params[:email], class: "form-input" %>
   </div>
 
   <div class="my-5">
-    <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "form-input" %>
+    <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Digite sua senha", maxlength: 72, class: "form-input" %>
   </div>
 
   <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
     <div class="inline">
-      <%= form.submit "Sign in", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
+      <%= form.submit "Entrar", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
     </div>
 
     <div class="mt-4 text-sm text-gray-500 sm:mt-0">
-      <%= link_to "Forgot password?", new_password_path, class: "link-muted" %>
+      <%= link_to "Esqueceu a senha?", new_password_path, class: "link-muted" %>
       &middot;
-      <%= link_to "Create an account", new_registration_path, class: "link-muted" %>
+      <%= link_to "Criar uma conta", new_registration_path, class: "link-muted" %>
     </div>
   </div>
 <% end %>

@@ -1,17 +1,17 @@
 <div class="flex flex-wrap items-center justify-between gap-3">
-  <h1 class="font-bold text-4xl">Spreadsheet Imports</h1>
-  <%= link_to "New import", new_admin_spreadsheet_import_path, class: "btn-primary" %>
+  <h1 class="font-bold text-4xl">Importações de Planilha</h1>
+  <%= link_to "Nova Importação", new_admin_spreadsheet_import_path, class: "btn-primary" %>
 </div>
 
 <div class="mt-6 overflow-x-auto">
   <table class="w-full min-w-max text-left">
     <thead>
       <tr class="border-b border-gray-300">
-        <th class="py-2">File</th>
-        <th class="py-2">Uploaded by</th>
+        <th class="py-2">Arquivo</th>
+        <th class="py-2">Enviado por</th>
         <th class="py-2">Status</th>
-        <th class="py-2">Progress</th>
-        <th class="py-2">Errors</th>
+        <th class="py-2">Progresso</th>
+        <th class="py-2">Erros</th>
         <th class="py-2"></th>
       </tr>
     </thead>
@@ -20,7 +20,7 @@
         <tr class="border-b border-gray-100" id="<%= dom_id(spreadsheet_import) %>">
           <td class="py-2"><%= spreadsheet_import.file.filename %></td>
           <td class="py-2"><%= spreadsheet_import.user.full_name %></td>
-          <td class="py-2"><%= spreadsheet_import.status.humanize %></td>
+          <td class="py-2"><%= spreadsheet_import.status == "processing" ? "Processando" : spreadsheet_import.status == "completed" ? "Concluída" : spreadsheet_import.status == "failed" ? "Falhou" : "Pendente" %></td>
           <td class="py-2"><%= spreadsheet_import.processed_rows %>/<%= spreadsheet_import.total_rows %></td>
           <td class="py-2"><%= spreadsheet_import.spreadsheet_import_row_errors.count %></td>
           <td class="py-2"><%= link_to "View", admin_spreadsheet_import_path(spreadsheet_import), class: "link-action" %></td>

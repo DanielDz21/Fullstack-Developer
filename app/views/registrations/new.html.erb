@@ -1,33 +1,33 @@
-<h1 class="font-bold text-4xl">Create your account</h1>
+<h1 class="font-bold text-4xl">Criar sua conta</h1>
 
 <%= form_with model: @user, url: registration_path, class: "contents" do |form| %>
   <%= render "shared/form_errors", record: @user %>
 
   <div class="my-5">
-    <%= form.text_field :full_name, required: true, autofocus: true, placeholder: "Full name", class: "form-input" %>
+    <%= form.text_field :full_name, required: true, autofocus: true, placeholder: "Nome", class: "form-input" %>
   </div>
 
   <div class="my-5">
-    <%= form.email_field :email, required: true, autocomplete: "username", placeholder: "Enter your email address", class: "form-input" %>
+    <%= form.email_field :email, required: true, autocomplete: "username", placeholder: "Digite seu e-mail", class: "form-input" %>
   </div>
 
   <div data-controller="password-confirmation">
     <div class="my-5">
-      <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Password", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "password", action: "input->password-confirmation#validate" } %>
+      <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Senha", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "password", action: "input->password-confirmation#validate" } %>
     </div>
 
     <div class="my-5">
-      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Confirm password", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "confirmation", action: "input->password-confirmation#validate" } %>
+      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Confirmar senha", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "confirmation", action: "input->password-confirmation#validate" } %>
     </div>
   </div>
 
   <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
     <div class="inline">
-      <%= form.submit "Sign up", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
+      <%= form.submit "Criar conta", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
     </div>
 
     <div class="mt-4 text-sm text-gray-500 sm:mt-0">
-      <%= link_to "Already have an account? Sign in", new_session_path, class: "link-muted" %>
+      <%= link_to "Já tem uma conta? Entrar", new_session_path, class: "link-muted" %>
     </div>
   </div>
 <% end %>

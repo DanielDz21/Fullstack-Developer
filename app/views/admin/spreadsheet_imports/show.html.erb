@@ -1,9 +1,9 @@
-<h1 class="font-bold text-4xl">Spreadsheet Import</h1>
-<p class="mt-4 text-gray-500"><%= @spreadsheet_import.file.filename %> — uploaded by <%= @spreadsheet_import.user.full_name %></p>
+<h1 class="font-bold text-4xl">Importação de Planilha</h1>
+<p class="mt-4 text-gray-500"><%= @spreadsheet_import.file.filename %> — enviado por <%= @spreadsheet_import.user.full_name %></p>
 
 <%= turbo_stream_from "spreadsheet_import_#{@spreadsheet_import.id}" %>
 <%= render "progress", spreadsheet_import: @spreadsheet_import %>
 
 <div class="mt-4">
-  <%= link_to "Back to imports", admin_spreadsheet_imports_path, class: "link-action" %>
+  <%= link_to "Voltar para imports", admin_spreadsheet_imports_path, class: "link-action" %>
 </div>

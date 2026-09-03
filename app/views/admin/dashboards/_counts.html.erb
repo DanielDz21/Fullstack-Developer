@@ -1,11 +1,11 @@
 <div id="dashboard_counts" data-controller="highlight-on-update" data-highlight-on-update-highlight-class="ring-2 ring-blue-400" class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
   <div class="rounded-lg border border-gray-200 p-4">
-    <p class="text-sm text-gray-500">Total Users</p>
+    <p class="text-sm text-gray-500">Total de Usuários</p>
     <p class="text-3xl font-bold"><%= total_users %></p>
   </div>
   <% User.roles.keys.each do |role| %>
     <div class="rounded-lg border border-gray-200 p-4">
-      <p class="text-sm text-gray-500"><%= role.humanize %></p>
+      <p class="text-sm text-gray-500"><%= role == "admin" ? "Administrador" : "Usuário Normal" %></p>
       <p class="text-3xl font-bold"><%= users_by_role[role] || 0 %></p>
     </div>
   <% end %>

@@ -11,15 +11,15 @@
     <div data-nav-toggle-target="menu" class="hidden flex-col gap-3 pb-4 sm:flex sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:pb-3">
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
         <% if Current.user.admin? %>
-          <%= link_to "Dashboard", admin_dashboard_path, class: "link-action" %>
-          <%= link_to "Manage users", admin_users_path, class: "link-action" %>
-          <%= link_to "Spreadsheet imports", admin_spreadsheet_imports_path, class: "link-action" %>
+          <%= link_to "Painel", admin_dashboard_path, class: "link-action" %>
+          <%= link_to "Gerenciar usuários", admin_users_path, class: "link-action" %>
+          <%= link_to "Importação de Planilhas", admin_spreadsheet_imports_path, class: "link-action" %>
         <% else %>
-          <%= link_to "My Profile", profile_path, class: "link-action" %>
+          <%= link_to "Meu Perfil", profile_path, class: "link-action" %>
         <% end %>
       </div>
 
-      <%= button_to "Sign out", session_path, method: :delete, class: "link-muted btn-link" %>
+      <%= button_to "Sair", session_path, method: :delete, class: "link-muted btn-link" %>
     </div>
   </div>
 </header>

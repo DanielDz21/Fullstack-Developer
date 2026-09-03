@@ -2,10 +2,10 @@
 
 <%= form_with url: passwords_path, class: "contents" do |form| %>
   <div class="my-5">
-    <%= form.email_field :email, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email], class: "form-input" %>
+    <%= form.email_field :email, required: true, autofocus: true, autocomplete: "username", placeholder: "Digite seu e-mail", value: params[:email], class: "form-input" %>
   </div>
 
   <div class="inline">
-    <%= form.submit "Email reset instructions", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
+    <%= form.submit "E-mail reset instructions", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
   </div>
 <% end %>

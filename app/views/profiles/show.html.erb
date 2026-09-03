@@ -1,21 +1,21 @@
-<h1 class="font-bold text-4xl">My Profile</h1>
+<h1 class="font-bold text-4xl">Meu Perfil</h1>
 
 <% if @user.avatar.attached? %>
   <%= image_tag @user.avatar.variant(resize_to_limit: [ 96, 96 ]), class: "size-24 rounded-full object-cover mt-4" %>
 <% end %>
 
 <dl class="mt-4 text-gray-700">
-  <dt class="font-medium">Full name</dt>
+  <dt class="font-medium">Nome</dt>
   <dd class="mb-2"><%= @user.full_name %></dd>
 
-  <dt class="font-medium">Email</dt>
+  <dt class="font-medium">E-mail</dt>
   <dd class="mb-2"><%= @user.email %></dd>
 
-  <dt class="font-medium">Role</dt>
-  <dd class="mb-2"><%= @user.role.humanize %></dd>
+  <dt class="font-medium">Papel</dt>
+  <dd class="mb-2"><%= @user.role == "admin" ? "Administrador" : "Usuário Normal" %></dd>
 </dl>
 
 <div class="mt-4 flex flex-wrap items-center gap-4">
-  <%= link_to "Edit profile", edit_profile_path, class: "link-action" %>
-  <%= button_to "Delete account", profile_path, method: :delete, class: "link-danger btn-link", form: { data: { turbo_confirm: "Are you sure? This cannot be undone." } } %>
+  <%= link_to "Editar perfil", edit_profile_path, class: "link-action" %>
+  <%= button_to "Excluir conta", profile_path, method: :delete, class: "link-danger btn-link", form: { data: { turbo_confirm: "Tem certeza? Esta ação não pode ser desfeita." } } %>
 </div>

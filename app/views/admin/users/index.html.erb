@@ -1,6 +1,6 @@
 <div class="flex flex-wrap items-center justify-between gap-3">
-  <h1 class="font-bold text-4xl">Users</h1>
-  <%= link_to "New user", new_admin_user_path, class: "btn-primary" %>
+  <h1 class="font-bold text-4xl">Usuários</h1>
+  <%= link_to "Novo Usuário", new_admin_user_path, class: "btn-primary" %>
 </div>
 
 <div class="mt-6 overflow-x-auto">
@@ -8,10 +8,10 @@
     <thead>
       <tr class="border-b border-gray-300">
         <th class="py-2">Avatar</th>
-        <th class="py-2">Full name</th>
-        <th class="py-2">Email</th>
-        <th class="py-2">Role</th>
-        <th class="py-2">Actions</th>
+        <th class="py-2">Nome</th>
+        <th class="py-2">E-mail</th>
+        <th class="py-2">Papel</th>
+        <th class="py-2">Ações</th>
       </tr>
     </thead>
     <tbody>
@@ -24,11 +24,11 @@
           </td>
           <td class="py-2"><%= user.full_name %></td>
           <td class="py-2"><%= user.email %></td>
-          <td class="py-2"><%= user.role.humanize %></td>
+          <td class="py-2"><%= user.role == "admin" ? "Administrador" : "Usuário Normal" %></td>
           <td class="py-2 space-x-2 whitespace-nowrap">
-            <%= link_to "Edit", edit_admin_user_path(user), class: "link-action" %>
-            <%= button_to "Toggle role", toggle_role_admin_user_path(user), method: :patch, class: "link-action btn-link" %>
-            <%= button_to "Delete", admin_user_path(user), method: :delete, class: "link-danger btn-link", form: { data: { turbo_confirm: "Are you sure?" } } %>
+            <%= link_to "Editar", edit_admin_user_path(user), class: "link-action" %>
+            <%= button_to "Alterar papel", toggle_role_admin_user_path(user), method: :patch, class: "link-action btn-link" %>
+            <%= button_to "Excluir", admin_user_path(user), method: :delete, class: "link-danger btn-link", form: { data: { turbo_confirm: "Tem certeza?" } } %>
           </td>
         </tr>
       <% end %>
