@@ -1,7 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Briefly highlights the dashboard counts whenever they are replaced by a
-// Turbo Stream broadcast, so the "real-time" update is actually noticeable.
+// Briefly highlights an element whenever it is replaced by a Turbo Stream
+// broadcast, so a "real-time" update (dashboard counts, import progress) is
+// actually noticeable.
 export default class extends Controller {
   static classes = ["highlight"]
 
