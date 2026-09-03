@@ -1,5 +1,10 @@
 # Modern Fullstack Developer Test (Rails 8 / Ruby 4)
 
+## AI Usage Disclosure
+This project was developed with the assistance of AI coding assistants:
+- Claude Sonnet 5 (Phases 0-4)
+- Gemini 3.1 Pro (Phases 5-13)
+
 - Check this readme.md
 - Create a branch to develop your task
 - Push to remote in 1 week (date will be checked from branch creation/assigned date)
