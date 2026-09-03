@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   AVATAR_CONTENT_TYPES = %w[image/png image/jpeg image/webp].freeze
   AVATAR_MAX_BYTES = 5.megabytes
+  DASHBOARD_COUNTS_CACHE_KEY = "admin_dashboard_counts"
 
   has_secure_password
   has_many :sessions, dependent: :destroy
@@ -8,9 +9,9 @@ class User < ApplicationRecord
 
   enum :role, { no_admin: 0, admin: 1 }
 
-  attr_accessor :avatar_url
+  attribute :avatar_url, :string
 
-  normalizes :email, with: ->(e) { e.strip.downcase }
+  normalizes :email, with: -> { it.strip.downcase }
 
   validates :full_name, presence: true
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -20,6 +21,10 @@ class User < ApplicationRecord
 
   after_commit :enqueue_avatar_download, if: -> { avatar_url.present? }
   after_commit :broadcast_dashboard_counts, if: -> { destroyed? || previously_new_record? || saved_change_to_role? }
+
+  def self.dashboard_counts
+    Rails.cache.fetch(DASHBOARD_COUNTS_CACHE_KEY) { { total_users: count, users_by_role: group(:role).count } }
+  end
 
   private
     def avatar_must_be_a_supported_image
@@ -39,11 +44,14 @@ class User < ApplicationRecord
     end
 
     def broadcast_dashboard_counts
+      Rails.cache.delete(DASHBOARD_COUNTS_CACHE_KEY)
+      counts = self.class.dashboard_counts
+
       Turbo::StreamsChannel.broadcast_replace_to(
         "admin_dashboard",
         target: "dashboard_counts",
         partial: "admin/dashboards/counts",
-        locals: { total_users: User.count, users_by_role: User.group(:role).count }
+        locals: counts
       )
     end
 end
