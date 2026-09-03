@@ -1,4 +1,9 @@
 <h1 class="font-bold text-4xl">My Profile</h1>
+
+<% if @user.avatar.attached? %>
+  <%= image_tag @user.avatar.variant(resize_to_limit: [ 96, 96 ]), class: "size-24 rounded-full object-cover mt-4" %>
+<% end %>
+
 <dl class="mt-4 text-gray-700">
   <dt class="font-medium">Full name</dt>
   <dd class="mb-2"><%= @user.full_name %></dd>
@@ -7,5 +12,11 @@
   <dd class="mb-2"><%= @user.email %></dd>
 
   <dt class="font-medium">Role</dt>
-  <dd class="mb-2"><%= @user.role %></dd>
+  <dd class="mb-2"><%= @user.role.humanize %></dd>
 </dl>
+
+<div class="mt-4 flex items-center gap-4">
+  <%= link_to "Edit profile", edit_profile_path, class: "text-blue-600 underline hover:no-underline" %>
+  <%= button_to "Delete account", profile_path, method: :delete, class: "text-red-600 underline hover:no-underline bg-transparent p-0 cursor-pointer", form: { data: { turbo_confirm: "Are you sure? This cannot be undone." } } %>
+  <%= button_to "Sign out", session_path, method: :delete, class: "text-gray-700 underline hover:no-underline bg-transparent p-0 cursor-pointer" %>
+</div>

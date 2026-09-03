@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
   resource :registration, only: %i[ new create ]
-  resource :profile, only: :show
+  resource :profile, only: %i[ show edit update destroy ]
   namespace :admin do
     resource :dashboard, only: :show
     resources :users do

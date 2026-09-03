@@ -1,2 +1,7 @@
 <h1 class="font-bold text-4xl">Admin Dashboard</h1>
 <p class="mt-4 text-gray-500">Signed in as <%= Current.user.full_name %> (<%= Current.user.role %>).</p>
+
+<div class="mt-4 flex items-center gap-4">
+  <%= link_to "Manage users", admin_users_path, class: "text-blue-600 underline hover:no-underline" %>
+  <%= button_to "Sign out", session_path, method: :delete, class: "text-gray-700 underline hover:no-underline bg-transparent p-0 cursor-pointer" %>
+</div>
