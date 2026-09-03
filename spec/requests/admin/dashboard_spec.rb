@@ -8,13 +8,14 @@ RSpec.describe "Admin::Dashboard", type: :request do
       expect(response).to redirect_to(new_session_path)
     end
 
-    it "forbids a signed in no_admin user" do
+    it "redirects a signed in no_admin user to their profile with an alert" do
       user = create(:user, password: "password123")
       sign_in_as(user)
 
       get admin_dashboard_path
 
-      expect(response).to have_http_status(:forbidden)
+      expect(response).to redirect_to(profile_url)
+      expect(flash[:alert]).to be_present
     end
 
     it "allows a signed in admin user" do
