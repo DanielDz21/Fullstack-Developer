@@ -24,7 +24,9 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <%= render "layouts/nav" if Current.user %>
+
+    <main class="container mx-auto mt-8 px-5 flex">
       <div class="mx-auto md:w-2/3 w-full">
         <%= render "layouts/flash" %>
         <%= yield %>

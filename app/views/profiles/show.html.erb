@@ -15,8 +15,7 @@
   <dd class="mb-2"><%= @user.role.humanize %></dd>
 </dl>
 
-<div class="mt-4 flex items-center gap-4">
-  <%= link_to "Edit profile", edit_profile_path, class: "text-blue-600 underline hover:no-underline" %>
-  <%= button_to "Delete account", profile_path, method: :delete, class: "text-red-600 underline hover:no-underline bg-transparent p-0 cursor-pointer", form: { data: { turbo_confirm: "Are you sure? This cannot be undone." } } %>
-  <%= button_to "Sign out", session_path, method: :delete, class: "text-gray-700 underline hover:no-underline bg-transparent p-0 cursor-pointer" %>
+<div class="mt-4 flex flex-wrap items-center gap-4">
+  <%= link_to "Edit profile", edit_profile_path, class: "link-action" %>
+  <%= button_to "Delete account", profile_path, method: :delete, class: "link-danger btn-link", form: { data: { turbo_confirm: "Are you sure? This cannot be undone." } } %>
 </div>

@@ -3,9 +3,3 @@
 
 <%= turbo_stream_from "admin_dashboard" %>
 <%= render "counts", total_users: @total_users, users_by_role: @users_by_role %>
-
-<div class="mt-4 flex items-center gap-4">
-  <%= link_to "Manage users", admin_users_path, class: "text-blue-600 underline hover:no-underline" %>
-  <%= link_to "Spreadsheet imports", admin_spreadsheet_imports_path, class: "text-blue-600 underline hover:no-underline" %>
-  <%= button_to "Sign out", session_path, method: :delete, class: "text-gray-700 underline hover:no-underline bg-transparent p-0 cursor-pointer" %>
-</div>
