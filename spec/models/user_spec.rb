@@ -15,6 +15,13 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_valid
       expect(user.errors[:email]).to be_present
     end
+
+    it "rejects a password shorter than 8 characters" do
+      user = build(:user, password: "short1", password_confirmation: "short1")
+
+      expect(user).not_to be_valid
+      expect(user.errors[:password]).to be_present
+    end
   end
 
   describe "email normalization" do

@@ -1,39 +1,33 @@
 <h1 class="font-bold text-4xl">Create your account</h1>
 
 <%= form_with model: @user, url: registration_path, class: "contents" do |form| %>
-  <% if @user.errors.any? %>
-    <div class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg">
-      <ul>
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+  <%= render "shared/form_errors", record: @user %>
+
+  <div class="my-5">
+    <%= form.text_field :full_name, required: true, autofocus: true, placeholder: "Full name", class: "form-input" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.email_field :email, required: true, autocomplete: "username", placeholder: "Enter your email address", class: "form-input" %>
+  </div>
+
+  <div data-controller="password-confirmation">
+    <div class="my-5">
+      <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Password", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "password", action: "input->password-confirmation#validate" } %>
     </div>
-  <% end %>
 
-  <div class="my-5">
-    <%= form.text_field :full_name, required: true, autofocus: true, placeholder: "Full name", class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.email_field :email, required: true, autocomplete: "username", placeholder: "Enter your email address", class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Password", maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Confirm password", maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+    <div class="my-5">
+      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Confirm password", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "confirmation", action: "input->password-confirmation#validate" } %>
+    </div>
   </div>
 
   <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
     <div class="inline">
-      <%= form.submit "Sign up", class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+      <%= form.submit "Sign up", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
     </div>
 
     <div class="mt-4 text-sm text-gray-500 sm:mt-0">
-      <%= link_to "Already have an account? Sign in", new_session_path, class: "text-gray-700 underline hover:no-underline" %>
+      <%= link_to "Already have an account? Sign in", new_session_path, class: "link-muted" %>
     </div>
   </div>
 <% end %>

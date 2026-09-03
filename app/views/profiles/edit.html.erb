@@ -1,51 +1,45 @@
 <h1 class="font-bold text-4xl">Edit Profile</h1>
 
 <%= form_with model: @user, url: profile_path, class: "contents" do |form| %>
-  <% if @user.errors.any? %>
-    <div class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg">
-      <ul>
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+  <%= render "shared/form_errors", record: @user %>
+
+  <div class="my-5">
+    <%= form.label :full_name, class: "form-label" %>
+    <%= form.text_field :full_name, required: true, class: "form-input" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :email, class: "form-label" %>
+    <%= form.email_field :email, required: true, autocomplete: "username", class: "form-input" %>
+  </div>
+
+  <div data-controller="password-confirmation">
+    <div class="my-5">
+      <%= form.label :password, "New password", class: "form-label" %>
+      <%= form.password_field :password, autocomplete: "new-password", placeholder: "Leave blank to keep the current password", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "password", action: "input->password-confirmation#validate" } %>
     </div>
-  <% end %>
 
-  <div class="my-5">
-    <%= form.label :full_name, class: "block font-medium" %>
-    <%= form.text_field :full_name, required: true, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+    <div class="my-5">
+      <%= form.label :password_confirmation, class: "form-label" %>
+      <%= form.password_field :password_confirmation, autocomplete: "new-password", minlength: 8, maxlength: 72, class: "form-input", data: { password_confirmation_target: "confirmation", action: "input->password-confirmation#validate" } %>
+    </div>
   </div>
 
   <div class="my-5">
-    <%= form.label :email, class: "block font-medium" %>
-    <%= form.email_field :email, required: true, autocomplete: "username", class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+    <%= form.label :avatar, "Avatar image", class: "form-label" %>
+    <%= form.file_field :avatar, accept: "image/png,image/jpeg,image/webp", class: "form-file" %>
   </div>
 
   <div class="my-5">
-    <%= form.label :password, "New password", class: "block font-medium" %>
-    <%= form.password_field :password, autocomplete: "new-password", placeholder: "Leave blank to keep the current password", maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :password_confirmation, class: "block font-medium" %>
-    <%= form.password_field :password_confirmation, autocomplete: "new-password", maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :avatar, "Avatar image", class: "block font-medium" %>
-    <%= form.file_field :avatar, accept: "image/png,image/jpeg,image/webp", class: "block mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :avatar_url, "…or avatar image URL", class: "block font-medium" %>
-    <%= form.url_field :avatar_url, placeholder: "https://example.com/avatar.png", class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+    <%= form.label :avatar_url, "…or avatar image URL", class: "form-label" %>
+    <%= form.url_field :avatar_url, placeholder: "https://example.com/avatar.png", class: "form-input" %>
   </div>
 
   <div class="inline">
-    <%= form.submit "Save", class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+    <%= form.submit "Save", class: "btn-primary w-full text-center cursor-pointer sm:w-auto" %>
   </div>
 <% end %>
 
 <div class="mt-4">
-  <%= link_to "Back to profile", profile_path, class: "text-gray-700 underline hover:no-underline" %>
+  <%= link_to "Back to profile", profile_path, class: "link-muted" %>
 </div>

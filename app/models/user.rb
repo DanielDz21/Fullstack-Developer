@@ -14,6 +14,7 @@ class User < ApplicationRecord
 
   validates :full_name, presence: true
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :password, length: { minimum: 8 }, allow_blank: true
   validate :avatar_must_be_a_supported_image, if: -> { avatar.attached? }
   validate :avatar_url_must_be_http, if: -> { avatar_url.present? }
 
