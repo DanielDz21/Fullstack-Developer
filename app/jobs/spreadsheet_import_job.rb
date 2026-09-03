@@ -39,7 +39,7 @@ class SpreadsheetImportJob < ApplicationJob
     def import_row(import, row_number, data)
       user = User.new(
         email: data["email"].to_s.strip,
-        full_name: data["full_name"].to_s.strip,
+        full_name: data["nome"].to_s.strip,
         password: SecureRandom.hex(16),
         role: :no_admin
       )

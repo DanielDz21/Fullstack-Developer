@@ -27,9 +27,9 @@ RSpec.describe SpreadsheetImportJob, type: :job do
 
       errors = spreadsheet_import.spreadsheet_import_row_errors.order(:row_number)
       expect(errors.pluck(:row_number)).to eq([ 3, 4, 5 ])
-      expect(errors[0].message).to match(/email can't be blank/i)
-      expect(errors[1].message).to match(/email is invalid/i)
-      expect(errors[2].message).to match(/email has already been taken/i)
+      expect(errors[0].message).to match(/e-mail não pode ficar em branco/i)
+      expect(errors[1].message).to match(/e-mail não é válido/i)
+      expect(errors[2].message).to match(/e-mail já está em uso/i)
     end
 
     it "gives imported users an unguessable random password" do

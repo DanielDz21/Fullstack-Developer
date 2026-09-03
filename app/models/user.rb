@@ -23,15 +23,15 @@ class User < ApplicationRecord
 
   private
     def avatar_must_be_a_supported_image
-      errors.add(:avatar, "must be a PNG, JPEG or WEBP image") unless avatar.content_type.in?(AVATAR_CONTENT_TYPES)
-      errors.add(:avatar, "is too large (max #{AVATAR_MAX_BYTES / 1.megabyte}MB)") if avatar.byte_size > AVATAR_MAX_BYTES
+      errors.add(:avatar, "deve ser uma imagem PNG, JPEG ou WEBP") unless avatar.content_type.in?(AVATAR_CONTENT_TYPES)
+      errors.add(:avatar, "é muito grande (máx #{AVATAR_MAX_BYTES / 1.megabyte}MB)") if avatar.byte_size > AVATAR_MAX_BYTES
     end
 
     def avatar_url_must_be_http
       uri = URI.parse(avatar_url)
-      errors.add(:avatar_url, "must be a valid http(s) URL") unless uri.is_a?(URI::HTTP) && uri.host.present?
+      errors.add(:avatar_url, "deve ser uma URL http(s) válida") unless uri.is_a?(URI::HTTP) && uri.host.present?
     rescue URI::InvalidURIError
-      errors.add(:avatar_url, "must be a valid http(s) URL")
+      errors.add(:avatar_url, "deve ser uma URL http(s) válida")
     end
 
     def enqueue_avatar_download

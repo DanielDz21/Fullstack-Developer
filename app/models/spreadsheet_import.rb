@@ -21,12 +21,12 @@ class SpreadsheetImport < ApplicationRecord
   private
     def file_must_be_a_supported_spreadsheet
       unless file.attached?
-        errors.add(:file, "must be attached")
+        errors.add(:file, "precisa ser enviada")
         return
       end
 
-      errors.add(:file, "must be a CSV or XLSX file") unless File.extname(file.filename.to_s).downcase.in?(ALLOWED_EXTENSIONS)
-      errors.add(:file, "is too large (max #{MAX_BYTES / 1.megabyte}MB)") if file.byte_size > MAX_BYTES
+      errors.add(:file, "deve ser um arquivo CSV ou XLSX") unless File.extname(file.filename.to_s).downcase.in?(ALLOWED_EXTENSIONS)
+      errors.add(:file, "é muito grande (máx #{MAX_BYTES / 1.megabyte}MB)") if file.byte_size > MAX_BYTES
     end
 
     def enqueue_import_job

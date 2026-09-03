@@ -1,4 +1,4 @@
-email,full_name
+email,nome
 dave@example.com,Dave Example
 ,Missing Email
 not-an-email,Bad Email Format
