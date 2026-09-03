@@ -19,7 +19,7 @@ class Admin::SpreadsheetImportsController < ApplicationController
     authorize @spreadsheet_import
 
     if @spreadsheet_import.save
-      redirect_to admin_spreadsheet_import_path(@spreadsheet_import), notice: "Spreadsheet uploaded. Import is processing in the background."
+      redirect_to admin_spreadsheet_import_path(@spreadsheet_import), notice: "Planilha enviada. A importação está sendo processada em segundo plano."
     else
       render :new, status: :unprocessable_entity
     end

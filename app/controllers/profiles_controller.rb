@@ -9,7 +9,7 @@ class ProfilesController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to profile_path, notice: "Profile was successfully updated."
+      redirect_to profile_path, notice: "Perfil atualizado com sucesso."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -18,7 +18,7 @@ class ProfilesController < ApplicationController
   def destroy
     @user.destroy
     cookies.delete(:session_id)
-    redirect_to new_session_path, notice: "Your account has been deleted.", status: :see_other
+    redirect_to new_session_path, notice: "Sua conta foi excluída.", status: :see_other
   end
 
   private

@@ -17,6 +17,6 @@ class ApplicationController < ActionController::Base
     end
 
     def user_not_authorized
-      redirect_to profile_path, alert: "You are not authorized to perform this action."
+      redirect_to profile_path, alert: "Você não tem permissão para realizar esta ação."
     end
 end

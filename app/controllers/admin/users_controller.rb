@@ -18,7 +18,7 @@ class Admin::UsersController < ApplicationController
     authorize @user
 
     if @user.save
-      redirect_to admin_users_path, notice: "User was successfully created."
+      redirect_to admin_users_path, notice: "Usuário criado com sucesso."
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class Admin::UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to admin_users_path, notice: "User was successfully updated."
+      redirect_to admin_users_path, notice: "Usuário atualizado com sucesso."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,15 +37,15 @@ class Admin::UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    redirect_to admin_users_path, notice: "User was successfully deleted.", status: :see_other
+    redirect_to admin_users_path, notice: "Usuário excluído com sucesso.", status: :see_other
   end
 
   def toggle_role
     if @user == Current.user
-      redirect_to admin_users_path, alert: "You cannot change your own role."
+      redirect_to admin_users_path, alert: "Você não pode alterar seu próprio papel (role)."
     else
       @user.update!(role: @user.admin? ? :no_admin : :admin)
-      redirect_to admin_users_path, notice: "Role was successfully updated."
+      redirect_to admin_users_path, notice: "Papel atualizado com sucesso."
     end
   end
 
