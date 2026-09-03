@@ -9,23 +9,23 @@ RSpec.describe "Admin dashboard live updates", type: :system do
       sign_in_via_ui(admin_two)
 
       within("#dashboard_counts") do
-        expect(page).to have_content("Total Users")
+        expect(page).to have_content("Total de Usuários")
         expect(page).to have_content("2")
       end
     end
 
     using_session(:admin_one) do
       sign_in_via_ui(admin_one)
-      click_link "Manage users"
-      click_link "New user"
+      click_link "Gerenciar usuários"
+      click_link "Novo Usuário"
 
-      fill_in "Full name", with: "Grace Hopper"
-      fill_in "Email", with: "grace-live@example.com"
-      fill_in "Password", with: "password123", exact: true
-      fill_in "Password confirmation", with: "password123"
-      click_button "Create User"
+      fill_in "Nome", with: "Grace Hopper"
+      fill_in "E-mail", with: "grace-live@example.com"
+      fill_in "Senha", with: "password123", exact: true
+      fill_in "Confirmar senha", with: "password123"
+      click_button "Criar Usuário"
 
-      expect(page).to have_content("User was successfully created")
+      expect(page).to have_content("Usuário criado com sucesso")
     end
 
     using_session(:admin_two) do

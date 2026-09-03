@@ -93,7 +93,7 @@ RSpec.describe "Admin::SpreadsheetImports", type: :request do
       get admin_spreadsheet_import_path(spreadsheet_import)
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("rows processed")
+      expect(response.body).to include("linhas processadas")
     end
 
     it "is forbidden for a no_admin user" do

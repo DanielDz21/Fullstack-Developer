@@ -15,7 +15,7 @@ FactoryBot.define do
   factory :spreadsheet_import_row_error do
     association :spreadsheet_import
     sequence(:row_number) { |n| n + 1 }
-    message { "Email can't be blank" }
-    raw_data { { "email" => "", "full_name" => "Missing Email" }.to_json }
+    message { "E-mail can't be blank" }
+    raw_data { { "email" => "", "full_name" => "Missing E-mail" }.to_json }
   end
 end

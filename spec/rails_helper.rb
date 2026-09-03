@@ -31,7 +31,7 @@ Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
 # If you are not using ActiveRecord, you can remove these lines.
 begin
   ActiveRecord::Migration.maintain_test_schema!
-rescue ActiveRecord::PendingMigrationError => e
+rescue ActiveRecord::PendenteMigrationError => e
   abort e.to_s.strip
 end
 RSpec.configure do |config|

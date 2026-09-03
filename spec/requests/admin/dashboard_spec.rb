@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Admin::Dashboard", type: :request do
+RSpec.describe "Admin::Painel", type: :request do
   describe "GET /admin/dashboard" do
     it "redirects unauthenticated visitors to sign in" do
       get admin_dashboard_path
