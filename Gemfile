@@ -84,6 +84,9 @@ group :test do
 
   # RSpec matchers for testing Pundit policies [https://github.com/pundit-community/pundit-matchers]
   gem "pundit-matchers"
+
+  # Stubs HTTP requests for testing outbound calls like AvatarFetcher [https://github.com/bblimke/webmock]
+  gem "webmock"
 end
 
 group :development do

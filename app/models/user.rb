@@ -8,15 +8,31 @@ class User < ApplicationRecord
 
   enum :role, { no_admin: 0, admin: 1 }
 
+  attr_accessor :avatar_url
+
   normalizes :email, with: ->(e) { e.strip.downcase }
 
   validates :full_name, presence: true
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validate :avatar_must_be_a_supported_image, if: -> { avatar.attached? }
+  validate :avatar_url_must_be_http, if: -> { avatar_url.present? }
+
+  after_commit :enqueue_avatar_download, if: -> { avatar_url.present? }
 
   private
     def avatar_must_be_a_supported_image
       errors.add(:avatar, "must be a PNG, JPEG or WEBP image") unless avatar.content_type.in?(AVATAR_CONTENT_TYPES)
       errors.add(:avatar, "is too large (max #{AVATAR_MAX_BYTES / 1.megabyte}MB)") if avatar.byte_size > AVATAR_MAX_BYTES
+    end
+
+    def avatar_url_must_be_http
+      uri = URI.parse(avatar_url)
+      errors.add(:avatar_url, "must be a valid http(s) URL") unless uri.is_a?(URI::HTTP) && uri.host.present?
+    rescue URI::InvalidURIError
+      errors.add(:avatar_url, "must be a valid http(s) URL")
+    end
+
+    def enqueue_avatar_download
+      AvatarDownloadJob.perform_later(id, avatar_url)
     end
 end
