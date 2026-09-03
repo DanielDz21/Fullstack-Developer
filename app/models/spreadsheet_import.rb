@@ -8,7 +8,7 @@ class SpreadsheetImport < ApplicationRecord
 
   enum :status, { pending: 0, processing: 1, completed: 2, failed: 3 }
 
-  validate :file_must_be_a_supported_spreadsheet
+  validate :file_must_be_a_supported_spreadsheet, on: :create
 
   after_commit :enqueue_import_job, on: :create
   after_commit :broadcast_progress, if: -> { saved_change_to_status? || saved_change_to_processed_rows? || saved_change_to_total_rows? }
