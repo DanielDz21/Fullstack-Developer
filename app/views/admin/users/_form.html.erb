@@ -1,4 +1,4 @@
-<%= form_with model: [ :admin, user ], class: "contents" do |form| %>
+<%= form_with model: [ :admin, user ], class: "contents", data: { turbo_frame: "_top" } do |form| %>
   <%= render "shared/form_errors", record: user %>
 
   <div class="my-5">
@@ -44,6 +44,6 @@
 
   <div class="mt-8 flex flex-col sm:flex-row gap-4 items-center">
     <%= form.submit (user.new_record? ? "Criar Usuário" : "Atualizar Usuário"), class: "btn-primary w-full sm:w-auto text-center cursor-pointer text-lg" %>
-    <%= link_to "Cancelar", admin_users_path, class: "link-muted" %>
+    <%= link_to "Cancelar", admin_users_path, class: "link-muted", data: { turbo_frame: "_top" } %>
   </div>
 <% end %>
