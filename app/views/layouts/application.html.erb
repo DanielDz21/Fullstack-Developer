@@ -25,7 +25,10 @@
 
   <body>
     <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
+      <div class="mx-auto md:w-2/3 w-full">
+        <%= render "layouts/flash" %>
+        <%= yield %>
+      </div>
     </main>
   </body>
 </html>
