@@ -99,6 +99,16 @@ RSpec.describe "Admin::Users", type: :request do
 
       expect(response).to redirect_to(profile_url)
     end
+
+    it "re-renders the form with errors when invalid" do
+      sign_in_as(admin)
+
+      expect {
+        post admin_users_path, params: { user: { full_name: "", email: "", password: "", password_confirmation: "" } }
+      }.not_to change(User, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 
   describe "PATCH /admin/users/:id" do
@@ -133,6 +143,15 @@ RSpec.describe "Admin::Users", type: :request do
 
       expect(response).to redirect_to(profile_url)
       expect(other_user.reload.full_name).not_to eq("Hacked")
+    end
+
+    it "re-renders the form with errors when invalid" do
+      other_user = create(:user)
+      sign_in_as(admin)
+
+      patch admin_user_path(other_user), params: { user: { full_name: "", email: "" } }
+
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 

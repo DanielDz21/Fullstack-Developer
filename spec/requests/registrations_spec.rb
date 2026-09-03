@@ -1,6 +1,14 @@
 require "rails_helper"
 
 RSpec.describe "Registrations", type: :request do
+  describe "GET /registration/new" do
+    it "is accessible to a visitor" do
+      get new_registration_path
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe "POST /registration" do
     it "creates a no_admin user, signs them in, and redirects to the profile" do
       expect {
