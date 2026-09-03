@@ -47,6 +47,12 @@ yarn-error.log
 # Aider Chat
 .aider*
 
+# Ruby LSP
+.ruby-lsp/
+
+# RSpec persisted run status (--only-failures / --next-failure)
+/spec/examples.txt
+
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 

@@ -52,6 +52,32 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Testing framework [https://github.com/rspec/rspec-rails]
+  gem "rspec-rails"
+
+  # Test data factories [https://github.com/thoughtbot/factory_bot_rails]
+  gem "factory_bot_rails"
+
+  # Fake data generator for factories [https://github.com/faker-ruby/faker]
+  gem "faker"
+
+  # One-liner matchers for common Rails functionality [https://github.com/thoughtbot/shoulda-matchers]
+  gem "shoulda-matchers"
+
+  # Splits the test suite across parallel processes [https://github.com/grosser/parallel_tests]
+  gem "parallel_tests"
+end
+
+group :test do
+  # Code coverage reporting [https://github.com/simplecov-ruby/simplecov]
+  gem "simplecov", require: false
+
+  # Acceptance test framework [https://github.com/teamcapybara/capybara]
+  gem "capybara"
+
+  # Playwright driver for Capybara system tests [https://github.com/YusukeIwaki/capybara-playwright-driver]
+  gem "capybara-playwright-driver"
 end
 
 group :development do
