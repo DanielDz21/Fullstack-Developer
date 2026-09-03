@@ -95,4 +95,30 @@ RSpec.describe User, type: :model do
       expect { user.save! }.not_to have_enqueued_job(AvatarDownloadJob)
     end
   end
+
+  describe "dashboard broadcasts" do
+    include ActionCable::TestHelper
+
+    it "broadcasts updated counts when a user is created" do
+      expect { create(:user) }.to have_broadcasted_to("admin_dashboard")
+    end
+
+    it "broadcasts updated counts when a user is destroyed" do
+      user = create(:user)
+
+      expect { user.destroy }.to have_broadcasted_to("admin_dashboard")
+    end
+
+    it "broadcasts updated counts when a user's role changes" do
+      user = create(:user)
+
+      expect { user.update!(role: :admin) }.to have_broadcasted_to("admin_dashboard")
+    end
+
+    it "does not broadcast when an unrelated attribute changes" do
+      user = create(:user)
+
+      expect { user.update!(full_name: "New Name") }.not_to have_broadcasted_to("admin_dashboard")
+    end
+  end
 end
