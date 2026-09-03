@@ -1,29 +1,31 @@
-<div class="flex items-center justify-between">
+<div class="flex flex-wrap items-center justify-between gap-3">
   <h1 class="font-bold text-4xl">Spreadsheet Imports</h1>
-  <%= link_to "New import", new_admin_spreadsheet_import_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+  <%= link_to "New import", new_admin_spreadsheet_import_path, class: "btn-primary" %>
 </div>
 
-<table class="w-full mt-6 text-left">
-  <thead>
-    <tr class="border-b border-gray-300">
-      <th class="py-2">File</th>
-      <th class="py-2">Uploaded by</th>
-      <th class="py-2">Status</th>
-      <th class="py-2">Progress</th>
-      <th class="py-2">Errors</th>
-      <th class="py-2"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @spreadsheet_imports.each do |spreadsheet_import| %>
-      <tr class="border-b border-gray-100" id="<%= dom_id(spreadsheet_import) %>">
-        <td class="py-2"><%= spreadsheet_import.file.filename %></td>
-        <td class="py-2"><%= spreadsheet_import.user.full_name %></td>
-        <td class="py-2"><%= spreadsheet_import.status.humanize %></td>
-        <td class="py-2"><%= spreadsheet_import.processed_rows %>/<%= spreadsheet_import.total_rows %></td>
-        <td class="py-2"><%= spreadsheet_import.spreadsheet_import_row_errors.count %></td>
-        <td class="py-2"><%= link_to "View", admin_spreadsheet_import_path(spreadsheet_import), class: "text-blue-600 underline hover:no-underline" %></td>
+<div class="mt-6 overflow-x-auto">
+  <table class="w-full min-w-max text-left">
+    <thead>
+      <tr class="border-b border-gray-300">
+        <th class="py-2">File</th>
+        <th class="py-2">Uploaded by</th>
+        <th class="py-2">Status</th>
+        <th class="py-2">Progress</th>
+        <th class="py-2">Errors</th>
+        <th class="py-2"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @spreadsheet_imports.each do |spreadsheet_import| %>
+        <tr class="border-b border-gray-100" id="<%= dom_id(spreadsheet_import) %>">
+          <td class="py-2"><%= spreadsheet_import.file.filename %></td>
+          <td class="py-2"><%= spreadsheet_import.user.full_name %></td>
+          <td class="py-2"><%= spreadsheet_import.status.humanize %></td>
+          <td class="py-2"><%= spreadsheet_import.processed_rows %>/<%= spreadsheet_import.total_rows %></td>
+          <td class="py-2"><%= spreadsheet_import.spreadsheet_import_row_errors.count %></td>
+          <td class="py-2"><%= link_to "View", admin_spreadsheet_import_path(spreadsheet_import), class: "link-action" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
