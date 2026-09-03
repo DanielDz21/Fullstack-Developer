@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   resource :profile, only: :show
   namespace :admin do
     resource :dashboard, only: :show
+    resources :users do
+      patch :toggle_role, on: :member
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
