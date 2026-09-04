@@ -37,6 +37,10 @@ Per Umanni's AI Policy, this is an honest account of the AI assistance actually 
 - Node.js (only for Playwright's browser binaries used by system specs)
 - SQLite 3.8+
 - Docker (optional, for containerized run/deploy)
+- **libvips** (Required for ActiveStorage image processing)
+
+> **⚠️ Important Note on Image Processing:** 
+> Starting with Rails 7, ActiveStorage defaults to using the `vips` variant processor instead of `ImageMagick`. You must have the `libvips` system library installed on your machine to upload and process avatars successfully (e.g., `sudo apt-get install libvips` on Debian/Ubuntu or `brew install vips` on macOS). If this package is missing, ActiveStorage will fail to load the variant processor silently and throw a `NoMethodError (undefined method 'new' for nil)` when attempting to generate image thumbnails.
 
 ## Setup
 
