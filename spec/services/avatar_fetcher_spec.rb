@@ -94,5 +94,18 @@ RSpec.describe AvatarFetcher do
       expect { described_class.new("http://example.com/big.png").fetch }
         .to raise_error(AvatarFetcher::FetchError, /too large/)
     end
+
+    it "rejects an unexpected (non-success, non-redirect) response" do
+      allow_resolve("example.com", public_ip)
+      stub_request(:get, "http://example.com/missing.png").to_return(status: 404)
+
+      expect { described_class.new("http://example.com/missing.png").fetch }
+        .to raise_error(AvatarFetcher::FetchError, /unexpected response/)
+    end
+
+    it "rejects a malformed URL" do
+      expect { described_class.new("http://exa mple.com/x").fetch }
+        .to raise_error(AvatarFetcher::FetchError, /invalid URL/)
+    end
   end
 end

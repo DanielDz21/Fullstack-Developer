@@ -69,6 +69,15 @@ RSpec.describe "Profiles", type: :request do
         patch profile_path, params: { user: { avatar_url: "https://example.com/avatar.png" } }
       }.to have_enqueued_job(AvatarDownloadJob).with(user.id, "https://example.com/avatar.png")
     end
+
+    it "re-renders the form with errors when invalid" do
+      user = create(:user, password: "password123")
+      sign_in_as(user)
+
+      patch profile_path, params: { user: { email: "" } }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 
   describe "DELETE /profile" do
