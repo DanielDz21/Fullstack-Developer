@@ -18,6 +18,11 @@ SimpleCov.start "rails" do
   skip "/spec/"
   skip "/config/"
   skip "/db/"
+
+  # Only enforced on a plain sequential `bundle exec rspec` run: each
+  # parallel_rspec worker (TEST_ENV_NUMBER set) only exercises a slice of the
+  # suite, so its own coverage is never representative of the whole.
+  minimum_coverage 90 unless ENV["TEST_ENV_NUMBER"]
 end
 
 RSpec.configure do |config|
