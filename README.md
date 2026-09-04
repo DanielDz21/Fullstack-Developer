@@ -189,11 +189,12 @@ automatically.
   itself only orchestrates: parse, loop, track progress, set final status). A bad
   row is recorded as a `SpreadsheetImportRowError` (row number + message + raw
   data) without aborting the rest of the import. Progress broadcasts are throttled
-  (once every 10 rows, always on the last row) rather than firing on every single
-  row, to keep large imports from flooding Turbo Streams with broadcasts; imported
-  users get an unusable random password and a "set your password" e-mail reusing
-  the existing password-reset token mechanism, since they never chose one
-  themselves.
+  to once every 10 rows rather than firing on every single row, to keep large
+  imports from flooding Turbo Streams with broadcasts — the final state is always
+  covered separately by the status transition at the end of the import, which
+  already reflects the finished row count on its own. Imported users get an
+  unusable random password and a "set your password" e-mail reusing the existing
+  password-reset token mechanism, since they never chose one themselves.
 - **Avatar via remote URL** (`app/services/avatar_fetcher.rb`) — fetched with
   `Net::HTTP` (never `URI.open`/`open-uri` on a user-supplied URL) behind an SSRF
   guard: resolves the host and rejects private/loopback/link-local IPs, limits

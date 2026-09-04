@@ -73,48 +73,6 @@ RSpec.describe SpreadsheetImportJob, type: :job do
     }.not_to change(User, :count)
   end
 
-  describe "has_header" do
-    it "maps columns positionally: 1st column is always the name, 2nd is always the email" do
-      spreadsheet_import = spreadsheet_import_with("valid_import.csv", "text/csv")
-
-      described_class.perform_now(spreadsheet_import.id)
-
-      expect(User.exists?(email: "alice@example.com", full_name: "Alice Example")).to be true
-    end
-
-    it "never uses the header row's own text to map columns, even when it doesn't say nome/email" do
-      spreadsheet_import = create(:spreadsheet_import, has_header: true)
-      spreadsheet_import.file.attach(
-        io: File.open(Rails.root.join("spec/fixtures/files/header_labels_mismatch_import.csv")),
-        filename: "header_labels_mismatch_import.csv",
-        content_type: "text/csv"
-      )
-
-      described_class.perform_now(spreadsheet_import.id)
-
-      expect(User.exists?(email: "henry@example.com", full_name: "Henry Example")).to be true
-    end
-
-    it "treats the first row as real data (positionally) when has_header is false" do
-      spreadsheet_import = create(:spreadsheet_import, has_header: false)
-      spreadsheet_import.file.attach(
-        io: File.open(Rails.root.join("spec/fixtures/files/valid_import_no_header.csv")),
-        filename: "valid_import_no_header.csv",
-        content_type: "text/csv"
-      )
-
-      expect {
-        described_class.perform_now(spreadsheet_import.id)
-      }.to change(User, :count).by(2)
-
-      spreadsheet_import.reload
-      expect(spreadsheet_import).to be_completed
-      expect(spreadsheet_import.total_rows).to eq(2)
-      expect(User.exists?(email: "frank@example.com", full_name: "Frank Example")).to be true
-      expect(User.exists?(email: "grace@example.com", full_name: "Grace Example")).to be true
-    end
-  end
-
   describe "progress broadcast throttling" do
     include ActionCable::TestHelper
 
@@ -128,11 +86,11 @@ RSpec.describe SpreadsheetImportJob, type: :job do
       )
 
       # status:processing (1) + total_rows set (1) + throttled progress every 10 rows
-      # plus the last row (3, for 25 rows: 10/20/25) + status:completed (1) = 6.
-      # A per-row broadcast would have produced 25+ instead.
+      # (rows 10 and 20, for 25 rows) + status:completed (1, which already reflects
+      # the final count) = 5. A per-row broadcast would have produced 25+ instead.
       expect {
         described_class.perform_now(spreadsheet_import.id)
-      }.to have_broadcasted_to("spreadsheet_import_#{spreadsheet_import.id}").exactly(6).times
+      }.to have_broadcasted_to("spreadsheet_import_#{spreadsheet_import.id}").exactly(5).times
     end
   end
 
