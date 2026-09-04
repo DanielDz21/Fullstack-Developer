@@ -6,7 +6,7 @@
   <div class="mb-8 flex flex-col items-center gap-8 sm:flex-row">
     <% if @user.avatar.attached? %>
       <div class="overflow-hidden rounded-full border-4 border-gray-50 shadow-sm">
-        <%= image_tag @user.avatar.variant(resize_to_limit: [ 128, 128 ]), class: "size-32 object-cover block" %>
+        <%= image_tag @user.avatar.variant(resize_to_limit: [ 128, 128 ]), alt: @user.full_name, class: "size-32 object-cover block" %>
       </div>
     <% end %>
 
