@@ -50,19 +50,19 @@ bin/rails db:seed      # creates the bootstrap admin user (see below)
 
 Public registration always creates a `no_admin` user (enforced server-side in
 `RegistrationsController`, ignoring any injected `role` param), so there is no way
-to reach an admin account from the UI alone. `db/seeds.rb` creates one bootstrap
-admin, idempotently, so the app is usable immediately after setup:
+to reach an admin account from the UI alone. `db/seeds.rb` creates two users,
+idempotently, so the app is usable immediately after setup:
 
-| Field    | Default                                    | Override with          |
-|----------|---------------------------------------------|-------------------------|
-| Email    | `admin@example.com`                        | `SEED_ADMIN_EMAIL`      |
-| Password | `password123`                              | `SEED_ADMIN_PASSWORD`   |
+| Role     | Email               | Password      |
+|----------|---------------------|----------------|
+| Admin    | `admin@example.com` | `password123` |
+| Regular  | `user@example.com`  | `password123` |
 
 ```bash
-SEED_ADMIN_EMAIL=you@example.com SEED_ADMIN_PASSWORD=a-strong-password bin/rails db:seed
+bin/rails db:seed
 ```
 
-Change the default password before deploying anywhere reachable by others.
+Change these default passwords before deploying anywhere reachable by others.
 
 ## Running in development
 
@@ -150,8 +150,6 @@ automatically.
 | `SOLID_QUEUE_IN_PUMA`     | `config/puma.rb`, Kamal       | Runs the Solid Queue supervisor inside the Puma process               | unset (off)                     |
 | `JOB_CONCURRENCY`         | `config/queue.yml`            | Number of Solid Queue worker processes                               | `1`                              |
 | `RAILS_LOG_LEVEL`         | `config/environments/production.rb` | Production log verbosity                                      | `info`                           |
-| `SEED_ADMIN_EMAIL`        | `db/seeds.rb`                 | Bootstrap admin's email                                                | `admin@example.com`             |
-| `SEED_ADMIN_PASSWORD`     | `db/seeds.rb`                 | Bootstrap admin's password                                             | `password123`                   |
 | `KAMAL_WEB_HOST`          | `config/deploy.yml`           | Deploy target host/IP                                                  | `203.0.113.10` (RFC 5737, fails fast) |
 | `KAMAL_REGISTRY_USERNAME` | `config/deploy.yml`           | GHCR username / image namespace                                       | `your-github-username`          |
 | `KAMAL_REGISTRY_PASSWORD` | `.kamal/secrets`              | GHCR auth (GitHub PAT, `write:packages` scope)                        | —  (required to deploy)         |

@@ -4,9 +4,17 @@
 
 # Registration always forces role: no_admin (see RegistrationsController), so there is no way to
 # reach an admin account from the UI alone. Seed one bootstrap admin so the app is usable right
-# after setup; override the credentials via ENV in any shared/production environment.
-User.find_or_create_by!(email: ENV.fetch("SEED_ADMIN_EMAIL", "admin@example.com")) do |user|
+# after setup.
+User.find_or_create_by!(email: "admin@example.com") do |user|
   user.full_name = "Admin"
-  user.password = ENV.fetch("SEED_ADMIN_PASSWORD", "password123")
+  user.password = "password123"
   user.role = :admin
+end
+
+# A regular (non-admin) user, seeded for convenience so the app has something to
+# sign in as beyond the admin account right after setup.
+User.find_or_create_by!(email: "user@example.com") do |user|
+  user.full_name = "User"
+  user.password = "password123"
+  user.role = :no_admin
 end
