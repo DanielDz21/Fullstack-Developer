@@ -72,9 +72,11 @@ bin/dev   # runs `bin/rails server` + `bin/rails tailwindcss:watch` via Procfile
 
 Visit `http://localhost:3000`, sign in with the seeded admin (or register a new
 regular user), and Solid Queue/Solid Cable both run in-process — no extra services to
-start. Outgoing mail (password reset / "set your password" for imported users) opens
-automatically in your browser via `letter_opener` in development — nothing to
-configure.
+start. Outgoing mail (password reset / "set your password" for imported users) is
+logged to the Rails console (`ApplicationMailer#log_to_console_in_development`,
+look for `[Mailer]` lines) and also written to `tmp/mails` — nothing opens
+automatically, since a bulk spreadsheet import can send thousands of e-mails at
+once.
 
 ## Running the test suite
 
@@ -99,10 +101,6 @@ bundle exec bundler-audit check
 Current state: 0 failures, ≥90% SimpleCov line coverage (enforced via
 `SimpleCov.minimum_coverage` — the suite itself fails if coverage regresses below
 that bar), 0 RuboCop offenses, 0 Brakeman warnings, 0 bundler-audit vulnerabilities.
-One system spec (`admin_spreadsheet_import_live_progress_spec.rb`) is a known,
-pre-existing timing-related flake when run alongside the full suite (passes reliably
-in isolation) — a Solid Cable broadcast race condition unrelated to any single
-feature's code.
 
 ## Running with Docker
 

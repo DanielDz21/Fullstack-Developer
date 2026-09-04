@@ -34,9 +34,12 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
-  # Open sent e-mails in the browser instead of trying (and silently failing) to
-  # deliver them over SMTP with no server configured.
-  config.action_mailer.delivery_method = :letter_opener
+  # Write sent e-mails to tmp/mails instead of trying (and silently failing) to
+  # deliver them over SMTP with no server configured. Deliberately not
+  # letter_opener: it opens a new browser tab per delivery, which would open
+  # thousands of tabs for a bulk spreadsheet import (see ApplicationMailer's
+  # after_deliver, which logs each one instead).
+  config.action_mailer.delivery_method = :file
   config.action_mailer.perform_deliveries = true
 
   # Make template changes take effect immediately.
