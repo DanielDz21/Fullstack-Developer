@@ -9,6 +9,7 @@
 
   <%= turbo_stream_from "spreadsheet_import_#{@spreadsheet_import.id}" %>
   <%= render "progress", spreadsheet_import: @spreadsheet_import %>
+  <%= render "row_errors", spreadsheet_import: @spreadsheet_import %>
 
   <div class="mt-8 pt-4 border-t border-gray-100 flex items-center">
     <%= link_to "Voltar para importações", admin_spreadsheet_imports_path, class: "link-muted font-medium" %>

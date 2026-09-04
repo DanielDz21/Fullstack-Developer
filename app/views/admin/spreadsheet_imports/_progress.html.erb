@@ -12,26 +12,4 @@
     </div>
     <p class="text-sm font-medium text-gray-600 text-right"><%= spreadsheet_import.processed_rows %> / <%= spreadsheet_import.total_rows %> linhas processadas</p>
   </div>
-
-  <% if spreadsheet_import.spreadsheet_import_row_errors.any? %>
-    <h2 class="font-bold text-xl text-gray-900 mt-8 mb-4">Erros nas Linhas</h2>
-    <div class="overflow-x-auto bg-white border border-gray-200 rounded-xl shadow-sm">
-      <table class="w-full min-w-max text-left border-collapse">
-        <thead class="bg-gray-50 border-b border-gray-200">
-          <tr>
-            <th class="py-3 px-4 font-semibold text-gray-500 text-xs uppercase tracking-wider w-24">Linha</th>
-            <th class="py-3 px-4 font-semibold text-gray-500 text-xs uppercase tracking-wider">Motivo</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-          <% spreadsheet_import.spreadsheet_import_row_errors.order(:row_number).each do |row_error| %>
-            <tr class="hover:bg-gray-50 transition-colors">
-              <td class="py-3 px-4 font-medium text-gray-900 text-center bg-gray-50/50"><%= row_error.row_number %></td>
-              <td class="py-3 px-4 text-red-600"><%= row_error.message %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  <% end %>
 </div>

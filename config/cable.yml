@@ -15,3 +15,7 @@ production:
       writing: cable
   polling_interval: 0.1.seconds
   message_retention: 1.day
+  # Autotrim (the default) runs a synchronous DELETE attempt on every single
+  # broadcast, which adds up fast under high-frequency writes (e.g. per-row
+  # import progress). Trim on a schedule instead (see config/recurring.yml).
+  autotrim: false
