@@ -114,4 +114,45 @@ RSpec.describe SpreadsheetImportJob, type: :job do
       expect(User.exists?(email: "grace@example.com", full_name: "Grace Example")).to be true
     end
   end
+
+  describe "progress broadcast throttling" do
+    include ActionCable::TestHelper
+
+    it "throttles progress broadcasts instead of firing on every row" do
+      spreadsheet_import = create(:spreadsheet_import)
+      rows = 25.times.map { |i| "Person #{i},person#{i}@example.com" }
+      spreadsheet_import.file.attach(
+        io: StringIO.new("nome,email\n#{rows.join("\n")}\n"),
+        filename: "many_rows.csv",
+        content_type: "text/csv"
+      )
+
+      # status:processing (1) + total_rows set (1) + throttled progress every 10 rows
+      # plus the last row (3, for 25 rows: 10/20/25) + status:completed (1) = 6.
+      # A per-row broadcast would have produced 25+ instead.
+      expect {
+        described_class.perform_now(spreadsheet_import.id)
+      }.to have_broadcasted_to("spreadsheet_import_#{spreadsheet_import.id}").exactly(6).times
+    end
+  end
+
+  describe "dashboard broadcast" do
+    include ActionCable::TestHelper
+
+    it "broadcasts dashboard counts once after the import, not once per created user" do
+      spreadsheet_import = spreadsheet_import_with("valid_import.csv", "text/csv")
+
+      expect {
+        described_class.perform_now(spreadsheet_import.id)
+      }.to have_broadcasted_to("admin_dashboard").exactly(1).times
+    end
+
+    it "does not broadcast dashboard counts when no user was created" do
+      spreadsheet_import = spreadsheet_import_with("malformed_import.csv", "text/csv")
+
+      expect {
+        described_class.perform_now(spreadsheet_import.id)
+      }.not_to have_broadcasted_to("admin_dashboard")
+    end
+  end
 end

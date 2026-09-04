@@ -10,6 +10,7 @@ class User < ApplicationRecord
   enum :role, { no_admin: 0, admin: 1 }
 
   attribute :avatar_url, :string
+  attr_accessor :skip_dashboard_broadcast
 
   normalizes :email, with: -> { it.strip.downcase }
 
@@ -20,10 +21,25 @@ class User < ApplicationRecord
   validate :avatar_url_must_be_http, if: -> { avatar_url.present? }
 
   after_commit :enqueue_avatar_download, if: -> { avatar_url.present? }
-  after_commit :broadcast_dashboard_counts, if: -> { destroyed? || previously_new_record? || saved_change_to_role? }
+  after_commit :broadcast_dashboard_counts, if: -> { !skip_dashboard_broadcast && (destroyed? || previously_new_record? || saved_change_to_role?) }
 
   def self.dashboard_counts
     Rails.cache.fetch(DASHBOARD_COUNTS_CACHE_KEY) { { total_users: count, users_by_role: group(:role).count } }
+  end
+
+  # Used by SpreadsheetImportJob to broadcast once after a bulk import instead of
+  # once per created user (each of which skips its own broadcast via
+  # skip_dashboard_broadcast).
+  def self.broadcast_dashboard_counts!
+    Rails.cache.delete(DASHBOARD_COUNTS_CACHE_KEY)
+    counts = dashboard_counts
+
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "admin_dashboard",
+      target: "dashboard_counts",
+      partial: "admin/dashboards/counts",
+      locals: counts
+    )
   end
 
   private
@@ -44,14 +60,6 @@ class User < ApplicationRecord
     end
 
     def broadcast_dashboard_counts
-      Rails.cache.delete(DASHBOARD_COUNTS_CACHE_KEY)
-      counts = self.class.dashboard_counts
-
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "admin_dashboard",
-        target: "dashboard_counts",
-        partial: "admin/dashboards/counts",
-        locals: counts
-      )
+      self.class.broadcast_dashboard_counts!
     end
 end

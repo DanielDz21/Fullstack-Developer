@@ -1,6 +1,11 @@
 class SpreadsheetImportJob < ApplicationJob
   queue_as :default
 
+  # Broadcasting progress on every single row floods Turbo Streams/Solid Cable on
+  # large imports (one full partial render + DB write per row); broadcast at most
+  # every Nth row instead, always including the last one.
+  PROGRESS_BROADCAST_INTERVAL = 10
+
   # Spreadsheet data is untrusted external input: every cell is treated as
   # plain data (never evaluated or interpreted), and a bad row is recorded as
   # a SpreadsheetImportRowError instead of aborting the whole import.
@@ -13,8 +18,15 @@ class SpreadsheetImportJob < ApplicationJob
     rows = parse_rows(import)
     import.update!(total_rows: rows.size)
 
-    rows.each { |row_number, data| import_row(import, row_number, data) }
+    users_created = 0
 
+    rows.each_with_index do |(row_number, data), index|
+      users_created += 1 if import_row(import, row_number, data)
+      import.update_columns(processed_rows: index + 1)
+      import.broadcast_progress if broadcast_now?(index, rows.size)
+    end
+
+    User.broadcast_dashboard_counts! if users_created.positive?
     import.update!(status: :completed)
   rescue => e
     Rails.logger.warn("SpreadsheetImportJob: failed to process import #{spreadsheet_import_id}: #{e.message}")
@@ -22,6 +34,10 @@ class SpreadsheetImportJob < ApplicationJob
   end
 
   private
+    def broadcast_now?(index, total)
+      (index + 1) % PROGRESS_BROADCAST_INTERVAL == 0 || index == total - 1
+    end
+
     def parse_rows(import)
       import.file.open do |tempfile|
         extension = File.extname(import.file.filename.to_s).delete(".").downcase.to_sym
@@ -36,22 +52,23 @@ class SpreadsheetImportJob < ApplicationJob
       end
     end
 
+    # Returns true if the row created a user, false if it was recorded as an error.
     def import_row(import, row_number, data)
       user = User.new(
         email: data["email"],
         full_name: data["nome"],
         password: SecureRandom.hex(16),
-        role: :no_admin
+        role: :no_admin,
+        skip_dashboard_broadcast: true
       )
 
-      unless user.save
-        import.spreadsheet_import_row_errors.create!(
-          row_number: row_number,
-          message: user.errors.full_messages.to_sentence,
-          raw_data: data.to_json
-        )
-      end
+      return true if user.save
 
-      import.update!(processed_rows: import.processed_rows + 1)
+      import.spreadsheet_import_row_errors.create!(
+        row_number: row_number,
+        message: user.errors.full_messages.to_sentence,
+        raw_data: data.to_json
+      )
+      false
     end
 end

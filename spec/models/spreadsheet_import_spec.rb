@@ -96,10 +96,24 @@ RSpec.describe SpreadsheetImport, type: :model do
         .to have_broadcasted_to("spreadsheet_import_#{spreadsheet_import.id}")
     end
 
-    it "broadcasts when processed_rows changes" do
+    it "broadcasts when total_rows changes" do
       spreadsheet_import = create(:spreadsheet_import)
 
-      expect { spreadsheet_import.update!(processed_rows: 1) }
+      expect { spreadsheet_import.update!(total_rows: 3) }
+        .to have_broadcasted_to("spreadsheet_import_#{spreadsheet_import.id}")
+    end
+
+    it "does not auto-broadcast when only processed_rows changes (throttled explicitly by the job instead)" do
+      spreadsheet_import = create(:spreadsheet_import)
+
+      expect { spreadsheet_import.update_columns(processed_rows: 1) }
+        .not_to have_broadcasted_to("spreadsheet_import_#{spreadsheet_import.id}")
+    end
+
+    it "#broadcast_progress broadcasts on demand" do
+      spreadsheet_import = create(:spreadsheet_import)
+
+      expect { spreadsheet_import.broadcast_progress }
         .to have_broadcasted_to("spreadsheet_import_#{spreadsheet_import.id}")
     end
 

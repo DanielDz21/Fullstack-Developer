@@ -11,11 +11,23 @@ class SpreadsheetImport < ApplicationRecord
   validate :file_must_be_a_supported_spreadsheet, on: :create
 
   after_commit :enqueue_import_job, on: :create
-  after_commit :broadcast_progress, if: -> { saved_change_to_status? || saved_change_to_processed_rows? || saved_change_to_total_rows? }
+  after_commit :broadcast_progress, if: -> { saved_change_to_status? || saved_change_to_total_rows? }
 
   def progress_percent
     return 0 if total_rows.zero?
     ((processed_rows.to_f / total_rows) * 100).round
+  end
+
+  # Per-row progress ticks bypass callbacks entirely (see SpreadsheetImportJob,
+  # which uses update_columns for those) so this is called explicitly, throttled,
+  # instead of firing on every single row.
+  def broadcast_progress
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "spreadsheet_import_#{id}",
+      target: "spreadsheet_import_progress",
+      partial: "admin/spreadsheet_imports/progress",
+      locals: { spreadsheet_import: self }
+    )
   end
 
   private
@@ -31,14 +43,5 @@ class SpreadsheetImport < ApplicationRecord
 
     def enqueue_import_job
       SpreadsheetImportJob.perform_later(id)
-    end
-
-    def broadcast_progress
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "spreadsheet_import_#{id}",
-        target: "spreadsheet_import_progress",
-        partial: "admin/spreadsheet_imports/progress",
-        locals: { spreadsheet_import: self }
-      )
     end
 end

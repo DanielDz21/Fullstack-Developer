@@ -127,5 +127,15 @@ RSpec.describe User, type: :model do
 
       expect { user.update!(full_name: "New Name") }.not_to have_broadcasted_to("admin_dashboard")
     end
+
+    it "does not broadcast when skip_dashboard_broadcast is set (bulk import path)" do
+      user = build(:user, skip_dashboard_broadcast: true)
+
+      expect { user.save! }.not_to have_broadcasted_to("admin_dashboard")
+    end
+
+    it "self.broadcast_dashboard_counts! broadcasts on demand" do
+      expect { User.broadcast_dashboard_counts! }.to have_broadcasted_to("admin_dashboard")
+    end
   end
 end
