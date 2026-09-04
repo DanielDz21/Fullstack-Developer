@@ -36,7 +36,7 @@
       <%= render "layouts/sidebar" %>
     <% end %>
 
-    <main class="ml-0 min-w-0 flex-1 transition-all duration-300 <%= Current.user ? 'md:ml-64' : '' %>">
+    <main class="ml-0 min-w-0 flex-1 transition-all duration-300 <%= Current.user ? 'mt-14 md:mt-0 md:ml-64' : '' %>">
       <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         <%= render "layouts/flash" %>
         <%= yield %>
