@@ -78,7 +78,15 @@ jobs:
         run: |
           echo "PLAYWRIGHT_CLI_VERSION=$(bundle exec ruby -e 'require "playwright"; puts Playwright::COMPATIBLE_PLAYWRIGHT_VERSION.strip')" >> "$GITHUB_ENV"
 
+      - name: Cache the Playwright npm package
+        id: playwright-npm-cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: playwright-npm-${{ runner.os }}-${{ env.PLAYWRIGHT_CLI_VERSION }}
+
       - name: Install the Playwright npm package
+        if: steps.playwright-npm-cache.outputs.cache-hit != 'true'
         run: npm install playwright@${{ env.PLAYWRIGHT_CLI_VERSION }}
 
       - name: Cache Playwright browser binaries
