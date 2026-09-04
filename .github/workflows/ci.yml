@@ -89,6 +89,9 @@ jobs:
           npm install playwright@${PLAYWRIGHT_CLI_VERSION}
           ./node_modules/.bin/playwright install --with-deps chromium
 
+      - name: Build Tailwind CSS
+        run: bin/rails tailwindcss:build
+
       - name: Prepare test databases in parallel
         run: bin/rails parallel:create parallel:load_schema
 
