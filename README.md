@@ -34,7 +34,8 @@ Per Umanni's AI Policy, this is an honest account of the AI assistance actually 
 ## Requirements
 
 - Ruby 4.0+ (see `.ruby-version`)
-- Node.js (only for Playwright's browser binaries used by system specs)
+- Node.js (only for Playwright's CLI and browser binaries used by system specs — CI
+  uses Node 22; see [Setup](#setup) for the install order that matters)
 - SQLite 3.8+
 - Docker (optional, for containerized run/deploy)
 - **libvips** (Required for ActiveStorage image processing)
@@ -46,9 +47,31 @@ Per Umanni's AI Policy, this is an honest account of the AI assistance actually 
 
 ```bash
 bundle install
-bin/rails db:prepare   # creates all 4 databases and loads the schema
-bin/rails db:seed      # creates the bootstrap admin user (see below)
+npm install                      # installs the exact Playwright CLI pinned in package.json
+npx playwright install chromium  # downloads the Chromium binary into ~/.cache/ms-playwright
+bin/rails db:prepare             # creates all 4 databases and loads the schema
+bin/rails db:seed                # creates the bootstrap admin user (see below)
 ```
+
+On Linux you may also need Chromium's OS-level libraries, which Playwright installs
+with `sudo npx playwright install-deps chromium` (this is what CI does via
+`playwright install --with-deps chromium`).
+
+> **⚠️ Run `npm install` *before* `npx playwright install`.** The `playwright` Ruby
+> gem drives a Node Playwright CLI whose version must match the gem's
+> `Playwright::COMPATIBLE_PLAYWRIGHT_VERSION` (currently **1.62.1**, pinned exactly
+> — no `^` — in `package.json`, so `npm install`/`npm update` can't drift off it).
+> With no local `node_modules`, `npx` silently fetches the
+> *latest* Playwright instead, which expects a different browser build number than
+> the one on disk — so system specs fail with `Executable doesn't exist at
+> ~/.cache/ms-playwright/chromium_headless_shell-<build>/...` even right after you
+> ran `playwright install`. Installing the pinned CLI first keeps the CLI, the gem,
+> and the downloaded browser on the same version. You can verify the two agree with:
+>
+> ```bash
+> bundle exec ruby -e 'require "playwright"; puts Playwright::COMPATIBLE_PLAYWRIGHT_VERSION'
+> node -e "console.log(require('./node_modules/playwright/package.json').version)"
+> ```
 
 ## Seeding
 
@@ -90,7 +113,8 @@ bundle exec rspec                       # full suite, sequential
 bundle exec rspec spec/path/to_spec.rb  # a single file
 bundle exec parallel_rspec spec/        # parallel, same as CI
 
-# System specs (Playwright) — set this if the Playwright CLI isn't globally resolvable:
+# System specs (Playwright) — needs the browser installed first, see Setup above.
+# Set this if the Playwright CLI isn't otherwise resolvable:
 PLAYWRIGHT_CLI_EXECUTABLE_PATH=./node_modules/.bin/playwright bundle exec rspec spec/system
 ```
 
