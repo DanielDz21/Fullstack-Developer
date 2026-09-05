@@ -135,11 +135,23 @@ that bar), 0 RuboCop offenses, 0 Brakeman warnings, 0 bundler-audit vulnerabilit
 ```bash
 docker build -t fullstack_developer .
 docker run -d -p 3000:80 \
-  -e RAILS_MASTER_KEY="$(cat config/master.key)" \
+  -e SECRET_KEY_BASE="$(openssl rand -hex 64)" \
   -e SOLID_QUEUE_IN_PUMA=true \
   --name fullstack_developer \
   fullstack_developer
 ```
+
+**No secret to obtain.** This app stores no encrypted Rails credentials (nothing in
+`app/`, `lib/`, or `config/` reads `Rails.application.credentials`), so it needs
+`secret_key_base` and nothing else — any freshly generated value works, and a clone of
+this repo can run the image without being handed a key. `SECRET_KEY_BASE` is read
+before credentials are ever touched, so no `config/master.key` is involved. The one
+thing the value affects is session and signed-cookie continuity: a new value on every
+`docker run` signs everyone out across restarts, which is fine for evaluation but not
+for a real deployment — see [Deploying with Kamal 2](#deploying-with-kamal-2). If you
+prefer the standard Rails flow, `bin/rails credentials:edit` generates your own
+`config/master.key` + `config/credentials.yml.enc` pair, and `-e RAILS_MASTER_KEY=...`
+then works instead.
 
 The image is a non-root, multi-stage build served by **Thruster** (zero-config
 asset caching/compression/HTTP proxy) on port 80. `SOLID_QUEUE_IN_PUMA=true` runs
@@ -160,17 +172,33 @@ machine:
 KAMAL_WEB_HOST=<your server ip/host> \
 KAMAL_REGISTRY_USERNAME=<your github username> \
 KAMAL_REGISTRY_PASSWORD=<a GitHub PAT with write:packages> \
+SECRET_KEY_BASE=<a stable 128-char hex value> \
 bin/kamal deploy
 ```
 
-`RAILS_MASTER_KEY` is picked up by `.kamal/secrets` from `config/master.key`
-automatically.
+`.kamal/secrets` reads `SECRET_KEY_BASE` from the deploying shell's environment and
+`config/deploy.yml` declares it under `env.secret` — the two must name the same
+secret or Kamal aborts. Unlike the throwaway value used for a local Docker run, this
+one must stay **stable across deploys**: changing it invalidates every existing
+session and signed cookie. Generate it once with `openssl rand -hex 64` and keep it in
+a password manager or your CI's secret store. To use Rails credentials instead, swap
+both references to `RAILS_MASTER_KEY` (the alternative is commented in
+`.kamal/secrets`).
+
+You can render the full config without contacting a server, which validates the ERB
+and resolves the secrets:
+
+```bash
+SECRET_KEY_BASE=test KAMAL_REGISTRY_USERNAME=x KAMAL_REGISTRY_PASSWORD=y \
+  KAMAL_WEB_HOST=198.51.100.10 bin/kamal config
+```
 
 ## Environment Variables
 
 | Variable                 | Used by                       | Purpose                                                              | Default                         |
 |---------------------------|--------------------------------|-------------------------------------------------------------------------|----------------------------------|
-| `RAILS_MASTER_KEY`        | Rails credentials, Kamal      | Decrypts `config/credentials.yml.enc` in production                  | —  (required in production)     |
+| `SECRET_KEY_BASE`         | Rails, Kamal                  | Signs sessions and signed cookies in production                       | —  (required in production)     |
+| `RAILS_MASTER_KEY`        | Rails credentials, Kamal      | Optional alternative to `SECRET_KEY_BASE`, only if you generate your own credentials via `bin/rails credentials:edit` | —  (unused by default)          |
 | `RAILS_MAX_THREADS`       | Puma, `database.yml`          | Puma thread pool size / SQLite connection pool size                  | `3` (Puma) / `5` (DB pool)       |
 | `PORT`                    | Puma                          | Server port                                                            | `3000`                          |
 | `SOLID_QUEUE_IN_PUMA`     | `config/puma.rb`, Kamal       | Runs the Solid Queue supervisor inside the Puma process               | unset (off)                     |

@@ -45,7 +45,10 @@ registry:
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
   secret:
-    - RAILS_MASTER_KEY
+    # Must match what .kamal/secrets actually provides, or Kamal aborts on an
+    # undeclared secret. Swap this for RAILS_MASTER_KEY if you generate your own
+    # Rails credentials — see the commented alternative in .kamal/secrets.
+    - SECRET_KEY_BASE
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
@@ -91,10 +94,9 @@ builder:
   #
   # # Pass arguments and secrets to the Docker build process
   # args:
-  #   RUBY_VERSION: ruby-4.0.0
+  #   RUBY_VERSION: 4.0.0
   # secrets:
   #   - GITHUB_TOKEN
-  #   - RAILS_MASTER_KEY
 
 # Use a different ssh user than root
 # ssh:

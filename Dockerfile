@@ -3,7 +3,7 @@
 
 # This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
 # docker build -t fullstack_developer .
-# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name fullstack_developer fullstack_developer
+# docker run -d -p 80:80 -e SECRET_KEY_BASE="$(openssl rand -hex 64)" --name fullstack_developer fullstack_developer
 
 # For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
 
